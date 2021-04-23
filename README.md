@@ -9,7 +9,7 @@ A [Flarum](http://flarum.org) extension. Media manager for uploaded files
 Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually with composer:
 
 ```sh
-composer require block-cat/digi-media-manager
+composer require block-cat/digi-media-manager *@dev
 ```
 
 ### Updating
