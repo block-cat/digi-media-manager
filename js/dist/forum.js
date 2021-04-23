@@ -91,7 +91,7 @@ module.exports =
 /*!******************!*\
   !*** ./forum.js ***!
   \******************/
-/*! no static exports found */
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -349,18 +349,22 @@ app.initializers.add('block-cat/digi-media-manager', function () {
     })), m("div", {
       id: "hideCurrentUserFileList",
       style: "display: block"
-    }, "TikTak")), m("div", {
+    }, m("div", {
+      "class": "dropzone"
+    }, m("i", {
+      "class": "fas fa-photo-video fa-10x"
+    }), m("h1", null, "Trage fi\u0219iere aici"), m("p", null, " sau folosi\u021Bi butonul \u201E\xCEncarc\u0103\u201D")))), m("div", {
       className: "Modal-footer"
     }, m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
       id: "allFilesButton",
       onclick: this.showAllFiles.bind(this),
       className: "Button Button--primary",
-      style: "display: inline;"
+      style: "display: inline; float: left;"
     }, app.translator.trans('All Files')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
       id: "currentFilesButton",
       onclick: this.showAllFiles.bind(this),
       className: "Button Button--primary",
-      style: "display: none;"
+      style: "display: none; float: left;"
     }, app.translator.trans('Current Files')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
       onclick: this.hide.bind(this),
       className: "Button"

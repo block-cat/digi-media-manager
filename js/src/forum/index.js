@@ -37,7 +37,7 @@ app.initializers.add('block-cat/digi-media-manager', () => {
               <div className="Modal-header">
                   <h3 className="App-titleControl App-titleControl--text">{app.translator.trans('fof-upload.forum.media_manager')}</h3>
               </div>
-
+          
               {this.alertAttrs && (
                   <div className="Modal-alert">
                       <Alert {...this.alertAttrs} />
@@ -55,15 +55,20 @@ app.initializers.add('block-cat/digi-media-manager', () => {
                   />
                 </div>
                 <div id="hideCurrentUserFileList" style="display: block">
-                  TikTak
+                  {/* Placeholder for CurrentUserFileList, @hide when loaded files */}
+                  <div class="dropzone">
+                    <i class="fas fa-photo-video fa-10x"></i>
+                    <h1>Trage fișiere aici</h1>
+                    <p> sau folosiți butonul „Încarcă”</p>
+                  </div>
                 </div>
               </div>
 
               <div className="Modal-footer">
-                <Button id="allFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: inline;">
+                <Button id="allFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: inline; float: left;">
                   {app.translator.trans('All Files')}
                 </Button>
-                <Button id="currentFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: none;">
+                <Button id="currentFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: none; float: left;">
                   {app.translator.trans('Current Files')}
                 </Button>
 
