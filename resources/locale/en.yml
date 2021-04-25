@@ -1,0 +1,8 @@
+digi-media-manager:
+  forum:
+    dropzone:
+      all_files: 'All files'
+      current_files: 'Current files'
+      title: 'Drag and drop here'
+      subtitle: 'or upload using the right-corner button'
+

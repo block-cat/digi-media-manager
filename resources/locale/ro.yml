@@ -1,0 +1,7 @@
+digi-media-manager:
+  forum:
+    all_files: 'Toate fișierele încărcate'
+    current_files: 'Fișiere încărcate recent'
+    dropzone:
+      title: 'Trage fișiere aici'
+      subtitle: 'sau folosește butonul „Încarcă”'

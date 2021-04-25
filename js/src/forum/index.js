@@ -1,6 +1,7 @@
 import { extend, override } from 'flarum/common/extend';
 import Button from 'flarum/components/Button';
 import UploadButton from './components/UploadButton';
+import DropZone from './components/DropZone';
 
 const {
   UserFileList
@@ -56,20 +57,16 @@ app.initializers.add('block-cat/digi-media-manager', () => {
                 </div>
                 <div id="hideCurrentUserFileList" style="display: block">
                   {/* Placeholder for CurrentUserFileList, @hide when loaded files */}
-                  <div class="dropzone">
-                    <i class="fas fa-photo-video fa-10x"></i>
-                    <h1>Trage fișiere aici</h1>
-                    <p> sau folosiți butonul „Încarcă”</p>
-                  </div>
+                  <DropZone/>
                 </div>
               </div>
 
               <div className="Modal-footer">
-                <Button id="allFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: inline; float: left;">
-                  {app.translator.trans('All Files')}
+                <Button id="allFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--secundary" style="display: inline; float: left;">
+                  {app.translator.trans('digi-media-manager.forum.all_files')}
                 </Button>
                 <Button id="currentFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: none; float: left;">
-                  {app.translator.trans('Current Files')}
+                  {app.translator.trans('digi-media-manager.forum.current_files')}
                 </Button>
 
                 <Button onclick={this.hide.bind(this)} className="Button">
@@ -89,7 +86,7 @@ app.initializers.add('block-cat/digi-media-manager', () => {
     );
   });
 
-  require('@fof-upload').components.FileManagerModal.prototype.showAllFiles = function () {
+  require('@fof-upload').components.FileManagerModal.prototype.showAllFiles =  () => {
     if (document.querySelector('#allFilesButton').style.display == "inline") {
       document.querySelector('#hideUserFileList').style.display = "block";
       document.querySelector('#hideCurrentUserFileList').style.display = "none";
