@@ -157,6 +157,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_common_app__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/common/Component */ "flarum/common/Component");
 /* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_common_Component__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _UserFileList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserFileList */ "./src/forum/components/UserFileList.js");
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/common/components/Button */ "flarum/common/components/Button");
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4__);
+
+
 
 
 
@@ -172,14 +177,30 @@ var DropZone = /*#__PURE__*/function (_Component) {
 
   _proto.oninit = function oninit(vnode) {
     _Component.prototype.oninit.call(this, vnode);
-  };
 
-  _proto.oncreate = function oncreate(vnode) {
-    _Component.prototype.oncreate.call(this, vnode);
+    this.uploaded = false;
   };
 
   _proto.view = function view() {
+    if (this.attrs.selectedFiles.length != 0) {
+      this.uploaded = true;
+    } else {
+      this.uploaded = false;
+    }
+
     return m("div", {
+      className: "DropZone"
+    }, this.uploaded && _UserFileList__WEBPACK_IMPORTED_MODULE_3__["default"].component({
+      user: this.attrs.user,
+      selectable: true,
+      onFileSelect: this.attrs.onFileSelect.bind(this),
+      selectedFiles: this.attrs.selectedFiles,
+      restrictFileType: this.attrs.restrictFileType
+    }), this.uploaded && m("div", {
+      className: "UserFileList-buttons"
+    }, flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
+      className: "Button Button--primary"
+    }, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('Transliterare'))), !this.uploaded && m("div", {
       className: "dropzone"
     }, m("div", {
       "class": "icon-container"
@@ -189,7 +210,7 @@ var DropZone = /*#__PURE__*/function (_Component) {
       "class": "far fa-file-pdf fa-4x"
     }), m("i", {
       "class": "far fa-file-alt fa-4x"
-    })), m("h1", null, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('digi-media-manager.forum.dropzone.title')), m("p", null, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('digi-media-manager.forum.dropzone.subtitle')));
+    })), m("h1", null, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('digi-media-manager.forum.dropzone.title')), m("p", null, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('digi-media-manager.forum.dropzone.subtitle'))));
   };
 
   return DropZone;
@@ -338,6 +359,278 @@ var UploadButton = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
+/***/ "./src/forum/components/UserFileList.js":
+/*!**********************************************!*\
+  !*** ./src/forum/components/UserFileList.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UserFileList; });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/common/Component */ "flarum/common/Component");
+/* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_common_Component__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/common/components/Button */ "flarum/common/components/Button");
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/common/components/Alert */ "flarum/common/components/Alert");
+/* harmony import */ var flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/common/components/LoadingIndicator */ "flarum/common/components/LoadingIndicator");
+/* harmony import */ var flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_common_utils_classList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/common/utils/classList */ "flarum/common/utils/classList");
+/* harmony import */ var flarum_common_utils_classList__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_common_utils_classList__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/common/utils/extractText */ "flarum/common/utils/extractText");
+/* harmony import */ var flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _utils_mimeToIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/mimeToIcon */ "./src/forum/utils/mimeToIcon.js");
+
+
+
+
+
+
+
+
+
+var UserFileList = /*#__PURE__*/function (_Component) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(UserFileList, _Component);
+
+  function UserFileList() {
+    return _Component.apply(this, arguments) || this;
+  }
+
+  var _proto = UserFileList.prototype;
+
+  _proto.oninit = function oninit(vnode) {
+    _Component.prototype.oninit.call(this, vnode); // Load file list
+
+
+    app.fileListState.setUser(vnode.attrs.user || app.session.user);
+    this.inModal = vnode.attrs.selectable;
+    this.restrictFileType = vnode.attrs.restrictFileType || null;
+    this.downloadOnClick = this.attrs.downloadOnClick || false;
+    /**
+     * @type {string[]} List of file UUIDs currently being hidden.
+     */
+
+    this.filesBeingHidden = [];
+    /**
+     * The user who's media we are dealing with
+     */
+
+    this.user = app.fileListState.user; // Uploaded files
+
+    this.showFiles = this.attrs.selectedFiles;
+  };
+
+  _proto.view = function view() {
+    var _this = this;
+
+    /**
+     * @type {{empty(): boolean, files: import('../../common/models/File').default[]}}
+     */
+    var state = app.fileListState;
+    return m("div", {
+      className: "fof-upload-file-list",
+      "aria-live": "polite"
+    }, state.isLoading() && state.files.length === 0 && m("div", {
+      className: 'fof-upload-loading'
+    }, app.translator.trans('fof-upload.forum.file_list.loading'), m(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4___default.a, null)), this.inModal && state.empty() && m("p", {
+      className: "fof-upload-empty"
+    }, m("i", {
+      className: "fas fa-cloud-upload-alt fof-upload-empty-icon"
+    }), app.translator.trans("fof-upload.forum.file_list.modal_empty_" + (app.screen() !== 'phone' ? 'desktop' : 'phone'))), !this.inModal && state.empty() && m("p", {
+      className: "fof-upload-empty"
+    }, app.translator.trans('fof-upload.forum.file_list.empty')), m("ul", null, state.files.map(function (file) {
+      if (!_this.showFiles.includes(file.id())) return;
+      var fileIcon = Object(_utils_mimeToIcon__WEBPACK_IMPORTED_MODULE_7__["default"])(file.type());
+      var fileSelectable = _this.restrictFileType ? _this.isSelectable(file) : true;
+      var fileClassNames = flarum_common_utils_classList__WEBPACK_IMPORTED_MODULE_5___default()(['fof-file', // File is image
+      fileIcon === 'image' && 'fof-file-type-image', // File is selected
+      _this.attrs.selectedFiles && _this.attrs.selectedFiles.indexOf(file.id()) >= 0 && 'fof-file-selected']);
+      /**
+       * File's baseName (file name + extension)
+       * @type {string}
+       */
+
+      var fileName = file.baseName();
+
+      var isFileHiding = _this.filesBeingHidden.includes(file.uuid());
+
+      return m("li", {
+        "aria-busy": isFileHiding
+      }, app.session.user && (_this.user === app.session.user || app.session.user.deleteOthersMediaLibrary()) && m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        className: "Button Button--icon fof-file-delete",
+        icon: "far fa-trash-alt",
+        "aria-label": app.translator.trans('fof-upload.forum.file_list.delete_file_a11y_label', {
+          fileName: fileName
+        }),
+        disabled: isFileHiding,
+        onclick: _this.hideFile.bind(_this, file)
+      }), m("button", {
+        className: fileClassNames,
+        onclick: function onclick() {
+          return _this.onFileClick(file);
+        },
+        disabled: !fileSelectable || isFileHiding,
+        "aria-label": flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_6___default()(app.translator.trans('fof-upload.forum.file_list.select_file_a11y_label', {
+          fileName: fileName
+        }))
+      }, m("figure", null, fileIcon === 'image' ? m("img", {
+        src: file.url(),
+        className: "fof-file-image-preview",
+        draggable: false // Images should always have an `alt`, even if empty!
+        //
+        // As we already state the file name as part of the
+        // button alt label, there's no point in restating it.
+        //
+        // See: https://www.w3.org/WAI/tutorials/images/decorative#decorative-image-as-part-of-a-text-link
+        ,
+        alt: ""
+      }) : m("span", {
+        className: "fof-file-icon" // Prevents a screen-reader from traversing this node.
+        //
+        // This is a placeholder for when no preview is available,
+        // and a preview won't benefit a user using a screen
+        // reader anyway, so there is no benefit to making them
+        // aware of a lack of a preview.
+        ,
+        role: "presentation"
+      }, m("i", {
+        className: "fa-fw " + fileIcon
+      })), m("figcaption", {
+        className: "fof-file-name"
+      }, fileName), isFileHiding && m("span", {
+        "class": "fof-file-loading",
+        role: "status",
+        "aria-label": app.translator.trans('fof-upload.forum.file_list.hide_file.loading')
+      }, m(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4___default.a, null)))));
+    })), state.hasMoreResults() && m("div", {
+      className: 'fof-load-more-files'
+    }, m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a, {
+      className: 'Button Button--primary',
+      disabled: state.isLoading(),
+      loading: state.isLoading(),
+      onclick: function onclick() {
+        return state.loadMore();
+      }
+    }, app.translator.trans('fof-upload.forum.file_list.load_more_files_btn'))));
+  }
+  /**
+   * Execute function on file click
+   *
+   * @param {import('../../common/models/File').default} file
+   */
+  ;
+
+  _proto.onFileClick = function onFileClick(file) {
+    // Custom functionality
+    if (this.attrs.onFileSelect) {
+      this.attrs.onFileSelect(file);
+      return;
+    } // Download on click
+
+
+    if (this.attrs.downloadOnClick) {
+      window.open(file.url());
+      return;
+    }
+  }
+  /**
+   * Check if a file is selectable
+   *
+   * @param {import('../../common/models/File').default} file
+   */
+  ;
+
+  _proto.isSelectable = function isSelectable(file) {
+    var fileType = file.type(); // Custom defined file types
+
+    if (Array.isArray(this.restrictFileType)) {
+      return this.restrictFileType.indexOf(fileType) >= 0;
+    } // Image
+    else if (this.restrictFileType === 'image') {
+        return fileType.includes('image/');
+      } // Audio
+      else if (this.restrictFileType === 'audio') {
+          return fileType.includes('audio/');
+        } // Video
+        else if (this.restrictFileType === 'video') {
+            return fileType.includes('video/');
+          }
+
+    return false;
+  }
+  /**
+   * Begins the hiding process for a file.
+   *
+   * - Shows a native confirmation dialog
+   * - If confirmed, sends AJAX request to the hide file API
+   *
+   * @param {import('../../common/models/File').default} file File to hide
+   */
+  ;
+
+  _proto.hideFile = function hideFile(file) {
+    var _this2 = this;
+
+    /**
+     * @type {string} File UUID
+     */
+    var uuid = file.uuid();
+    if (this.filesBeingHidden.includes(uuid)) return;
+    this.filesBeingHidden.push(uuid);
+    var confirmHide = confirm(flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_6___default()(app.translator.trans('fof-upload.forum.file_list.hide_file.hide_confirmation', {
+      fileName: file.baseName()
+    })));
+
+    if (confirmHide) {
+      app.request({
+        method: 'PATCH',
+        url: app.forum.attribute('apiUrl') + "/fof/upload/hide",
+        body: {
+          uuid: uuid
+        }
+      }).then(function () {
+        app.alerts.show(flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_3___default.a, {
+          type: 'success'
+        }, app.translator.trans('fof-upload.forum.file_list.hide_file.hide_success'));
+      })["catch"](function () {
+        app.alerts.show(flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_3___default.a, {
+          type: 'error'
+        }, app.translator.trans('fof-upload.forum.file_list.hide_file.hide_fail', {
+          fileName: file.fileName()
+        }));
+      }).then(function () {
+        // Remove hidden file from state
+
+        /**
+         * @type {{ files: import('../../common/models/File').default[] }}
+         */
+        var state = app.fileListState;
+        var index = state.files.findIndex(function (file) {
+          return uuid === file.uuid();
+        });
+        state.files.splice(index, 1); // Remove file from hiding list
+
+        var i = _this2.filesBeingHidden.indexOf(uuid);
+
+        _this2.filesBeingHidden.splice(i, 1);
+      });
+    } else {
+      // Remove file from hiding list
+      var i = this.filesBeingHidden.indexOf(uuid);
+      this.filesBeingHidden.splice(i, 1);
+    }
+  };
+
+  return UserFileList;
+}(flarum_common_Component__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+/***/ }),
+
 /***/ "./src/forum/index.js":
 /*!****************************!*\
   !*** ./src/forum/index.js ***!
@@ -403,7 +696,12 @@ flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.initializers.add('block-cat/di
       onFileSelect: this.onFileSelect.bind(this),
       selectedFiles: this.selectedFiles,
       restrictFileType: this.restrictFileType
-    }) : _components_DropZone__WEBPACK_IMPORTED_MODULE_3__["default"].component()), m("div", {
+    }) : _components_DropZone__WEBPACK_IMPORTED_MODULE_3__["default"].component({
+      user: this.attrs.user,
+      onFileSelect: this.onFileSelect.bind(this),
+      selectedFiles: this.selectedFiles,
+      restrictFileType: this.restrictFileType
+    })), m("div", {
       className: "Modal-footer"
     }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.attribute('userFileListVisibility') ? flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a.component({
       id: "currentFilesButton",
@@ -427,6 +725,61 @@ flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.initializers.add('block-cat/di
     flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.data.attributes.userFileListVisibility ^= true;
   };
 });
+
+/***/ }),
+
+/***/ "./src/forum/utils/mimeToIcon.js":
+/*!***************************************!*\
+  !*** ./src/forum/utils/mimeToIcon.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return mimeToIcon; });
+var image = ['image/png', 'image/jpg', 'image/jpeg', 'image/svg+xml', 'image/gif'];
+var archive = ['application/zip', 'application/x-7z-compressed', 'application/gzip', 'application/vnd.rar', 'application/x-rar-compressed'];
+var code = ['text/html', 'text/css', 'text/javascript', 'application/json', 'application/ld+json', 'text/javascript', 'application/x-httpd-php'];
+var word = ['application/x-abiword', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
+/**
+ * Returns a FontAwesome icon class for a specified MIME type.
+ *
+ * If it's a known image type, it returns `image` instead.
+ *
+ * @param {string} fileType MIME type
+ * @returns {string} Icon for MIME type
+ */
+
+function mimeToIcon(fileType) {
+  // Display image (do not display for)
+  if (image.includes(fileType)) {
+    return 'image';
+  } // Display image icon for other types
+  else if (fileType.includes('image/')) {
+      return 'far fa-file-image';
+    } // Video icon
+    else if (fileType.includes('video/')) {
+        return 'far fa-file-video';
+      } // Archive icon
+      else if (archive.indexOf(fileType) >= 0) {
+          return 'far fa-file-archive';
+        } // PDF icon
+        else if (fileType === 'application/pdf') {
+            return 'far fa-file-pdf';
+          } // Word
+          else if (word.indexOf(fileType) >= 0) {
+              return 'far fa-file-word';
+            } // Audio icon
+            else if (fileType.includes('audio/')) {
+                return 'far fa-file-audio';
+              } // Code files
+              else if (code.indexOf(fileType) >= 0) {
+                  return 'far fa-file-code';
+                }
+
+  return 'far fa-file';
+}
 
 /***/ }),
 
@@ -474,6 +827,17 @@ module.exports = flarum.core.compat['common/app'];
 
 /***/ }),
 
+/***/ "flarum/common/components/Alert":
+/*!****************************************************************!*\
+  !*** external "flarum.core.compat['common/components/Alert']" ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['common/components/Alert'];
+
+/***/ }),
+
 /***/ "flarum/common/components/Button":
 /*!*****************************************************************!*\
   !*** external "flarum.core.compat['common/components/Button']" ***!
@@ -515,6 +879,17 @@ module.exports = flarum.core.compat['common/extend'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['common/utils/classList'];
+
+/***/ }),
+
+/***/ "flarum/common/utils/extractText":
+/*!*****************************************************************!*\
+  !*** external "flarum.core.compat['common/utils/extractText']" ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['common/utils/extractText'];
 
 /***/ }),
 

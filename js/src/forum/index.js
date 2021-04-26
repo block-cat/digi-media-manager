@@ -53,7 +53,12 @@ app.initializers.add('block-cat/digi-media-manager', () => {
                   selectedFiles: this.selectedFiles,
                   restrictFileType: this.restrictFileType
                 }) : 
-                  DropZone.component()
+                  DropZone.component({
+                    user: this.attrs.user,
+                    onFileSelect: this.onFileSelect.bind(this),
+                    selectedFiles: this.selectedFiles,
+                    restrictFileType: this.restrictFileType
+                  })
                 }
               </div>
 
