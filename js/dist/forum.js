@@ -353,25 +353,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_UploadButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/UploadButton */ "./src/forum/components/UploadButton.js");
 /* harmony import */ var _components_DropZone__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/DropZone */ "./src/forum/components/DropZone.js");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/app */ "flarum/app");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_app__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
 
-var UserFileList = __webpack_require__(/*! @fof-upload */ "@fof-upload").components.UserFileList;
-
-app.initializers.add('block-cat/digi-media-manager', function () {
-  // console.log(app);
+flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.initializers.add('block-cat/digi-media-manager', function () {
+  Object(flarum_common_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(__webpack_require__(/*! @fof-upload */ "@fof-upload").components.FileManagerModal.prototype, 'oninit', function () {
+    flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.data.attributes.userFileListVisibility = false;
+  });
   Object(flarum_common_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(__webpack_require__(/*! @fof-upload */ "@fof-upload").components.FileManagerButton.prototype, 'view', function (original) {
     return flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a.component({
       className: 'Button fof-upload-button Button--icon',
       onclick: this.fileManagerButtonClicked.bind(this),
       icon: 'fas fa-folder-open',
-      title: app.translator.trans('fof-upload.forum.buttons.media')
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('fof-upload.forum.buttons.media')
     });
   });
   Object(flarum_common_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(__webpack_require__(/*! @fof-upload */ "@fof-upload").components.FileManagerModal.prototype, 'view', function (original) {
-    // console.log(app);
     return m("div", {
       className: "Modal modal-dialog " + this.className()
     }, m("div", {
@@ -380,7 +381,7 @@ app.initializers.add('block-cat/digi-media-manager', function () {
       className: "fof-modal-buttons App-backControl"
     }, m(_components_UploadButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
       uploader: this.uploader,
-      disabled: app.fileListState.isLoading(),
+      disabled: flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.fileListState.isLoading(),
       isMediaUploadButton: true
     })), m("div", {
       className: "fof-drag-and-drop"
@@ -388,76 +389,44 @@ app.initializers.add('block-cat/digi-media-manager', function () {
       className: "fof-drag-and-drop-release"
     }, m("i", {
       className: "fas fa-cloud-upload-alt"
-    }), app.translator.trans('fof-upload.forum.file_list.release_to_upload'))), m("div", {
+    }), flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('fof-upload.forum.file_list.release_to_upload'))), m("div", {
       className: "Modal-header"
     }, m("h3", {
       className: "App-titleControl App-titleControl--text"
-    }, app.translator.trans('fof-upload.forum.media_manager'))), this.alertAttrs && m("div", {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('fof-upload.forum.media_manager'))), this.alertAttrs && m("div", {
       className: "Modal-alert"
     }, m(Alert, this.alertAttrs)), m("div", {
       className: "Modal-body"
-    }, m("div", {
-      id: "hideUserFileList",
-      style: "display: none;"
-    }, m(UserFileList, {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.attribute('userFileListVisibility') ? __webpack_require__(/*! @fof-upload */ "@fof-upload").components.UserFileList.component({
       user: this.attrs.user,
       selectable: true,
       onFileSelect: this.onFileSelect.bind(this),
       selectedFiles: this.selectedFiles,
       restrictFileType: this.restrictFileType
-    })), m("div", {
-      id: "hideCurrentUserFileList",
-      style: "display: block"
-    }, m(_components_DropZone__WEBPACK_IMPORTED_MODULE_3__["default"], null))), m("div", {
+    }) : _components_DropZone__WEBPACK_IMPORTED_MODULE_3__["default"].component()), m("div", {
       className: "Modal-footer"
-    }, m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
-      id: "allFilesButton",
-      onclick: this.showAllFiles.bind(this),
-      className: "Button Button--secundary",
-      style: "display: inline; float: left;"
-    }, app.translator.trans('digi-media-manager.forum.all_files')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.attribute('userFileListVisibility') ? flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a.component({
       id: "currentFilesButton",
       onclick: this.showAllFiles.bind(this),
-      className: "Button Button--primary",
-      style: "display: none; float: left;"
-    }, app.translator.trans('digi-media-manager.forum.current_files')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      className: "Button Button--primary"
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('digi-media-manager.forum.current_files')) : flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a.component({
+      id: "allFilesButton",
+      onclick: this.showAllFiles.bind(this),
+      className: "Button Button--secundary"
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('digi-media-manager.forum.all_files')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
       onclick: this.hide.bind(this),
       className: "Button"
-    }, app.translator.trans('fof-upload.forum.buttons.cancel')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.trans('fof-upload.forum.buttons.cancel')), m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
       onclick: this.onSelect.bind(this),
       disabled: this.selectedFiles.length === 0 || !this.multiSelect && this.selectedFiles.length > 1,
       className: "Button Button--primary"
-    }, app.translator.transChoice('fof-upload.forum.file_list.confirm_selection_btn', this.selectedFiles.length)))));
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.translator.transChoice('fof-upload.forum.file_list.confirm_selection_btn', this.selectedFiles.length)))));
   });
 
   __webpack_require__(/*! @fof-upload */ "@fof-upload").components.FileManagerModal.prototype.showAllFiles = function () {
-    if (document.querySelector('#allFilesButton').style.display == "inline") {
-      document.querySelector('#hideUserFileList').style.display = "block";
-      document.querySelector('#hideCurrentUserFileList').style.display = "none";
-      document.querySelector('#allFilesButton').style.display = "none";
-      document.querySelector('#currentFilesButton').style.display = "inline";
-    } else {
-      document.querySelector('#hideUserFileList').style.display = "none";
-      document.querySelector('#hideCurrentUserFileList').style.display = "block";
-      document.querySelector('#allFilesButton').style.display = "inline";
-      document.querySelector('#currentFilesButton').style.display = "none";
-    } // console.log(this.selectedFiles);
-
+    flarum_app__WEBPACK_IMPORTED_MODULE_4___default.a.forum.data.attributes.userFileListVisibility ^= true;
   };
-}); // function showAllFiles() {
-// document.querySelector('.Modal-body').append(
-//   require('@fof-upload').components.UserFileList.component({
-//     user: this.attrs.user
-//   })
-// <UserFileList
-//   user={this.attrs.user}
-//   selectable
-//   onFileSelect={this.onFileSelect.bind(this)}
-//   selectedFiles={this.selectedFiles}
-//   restrictFileType={this.restrictFileType}
-// /> 
-// );
-// }
+});
 
 /***/ }),
 
@@ -469,6 +438,17 @@ app.initializers.add('block-cat/digi-media-manager', function () {
 /***/ (function(module, exports) {
 
 module.exports = flarum.extensions['fof-upload'];
+
+/***/ }),
+
+/***/ "flarum/app":
+/*!********************************************!*\
+  !*** external "flarum.core.compat['app']" ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['app'];
 
 /***/ }),
 

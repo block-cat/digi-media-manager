@@ -2,13 +2,13 @@ import { extend, override } from 'flarum/common/extend';
 import Button from 'flarum/components/Button';
 import UploadButton from './components/UploadButton';
 import DropZone from './components/DropZone';
-
-const {
-  UserFileList
-} = require('@fof-upload').components;
+import app from 'flarum/app';
 
 app.initializers.add('block-cat/digi-media-manager', () => {
-  // console.log(app);
+  extend(require('@fof-upload').components.FileManagerModal.prototype, 'oninit', function() {
+    app.forum.data.attributes.userFileListVisibility = false;
+  });
+
   override(require('@fof-upload').components.FileManagerButton.prototype, 'view', function(original) {
     return Button.component({
       className: 'Button fof-upload-button Button--icon',
@@ -19,7 +19,6 @@ app.initializers.add('block-cat/digi-media-manager', () => {
   });
 
   override(require('@fof-upload').components.FileManagerModal.prototype, 'view', function(original) {
-    // console.log(app);
     return (
       <div className={`Modal modal-dialog ${this.className()}`}>
           <div className="Modal-content">
@@ -46,28 +45,36 @@ app.initializers.add('block-cat/digi-media-manager', () => {
               )}
 
               <div className="Modal-body">
-                <div id="hideUserFileList" style="display: none;">
-                  <UserFileList
-                      user={this.attrs.user}
-                      selectable
-                      onFileSelect={this.onFileSelect.bind(this)}
-                      selectedFiles={this.selectedFiles}
-                      restrictFileType={this.restrictFileType}
-                  />
-                </div>
-                <div id="hideCurrentUserFileList" style="display: block">
-                  {/* Placeholder for CurrentUserFileList, @hide when loaded files */}
-                  <DropZone/>
-                </div>
+                {(app.forum.attribute('userFileListVisibility')) ?
+                require('@fof-upload').components.UserFileList.component({
+                  user: this.attrs.user,
+                  selectable: true,
+                  onFileSelect: this.onFileSelect.bind(this),
+                  selectedFiles: this.selectedFiles,
+                  restrictFileType: this.restrictFileType
+                }) : 
+                  DropZone.component()
+                }
               </div>
 
               <div className="Modal-footer">
-                <Button id="allFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--secundary" style="display: inline; float: left;">
-                  {app.translator.trans('digi-media-manager.forum.all_files')}
-                </Button>
-                <Button id="currentFilesButton" onclick={this.showAllFiles.bind(this)} className="Button Button--primary" style="display: none; float: left;">
-                  {app.translator.trans('digi-media-manager.forum.current_files')}
-                </Button>
+                {
+                  (app.forum.attribute('userFileListVisibility')) ?
+                  Button.component({
+                    id: "currentFilesButton",
+                    onclick: this.showAllFiles.bind(this),
+                    className: "Button Button--primary",
+                  },
+                  app.translator.trans('digi-media-manager.forum.current_files')
+                  ) :
+                  Button.component({
+                    id: "allFilesButton",
+                    onclick: this.showAllFiles.bind(this),
+                    className: "Button Button--secundary",
+                  },
+                  app.translator.trans('digi-media-manager.forum.all_files')
+                  )
+                }
 
                 <Button onclick={this.hide.bind(this)} className="Button">
                     {app.translator.trans('fof-upload.forum.buttons.cancel')}
@@ -87,32 +94,6 @@ app.initializers.add('block-cat/digi-media-manager', () => {
   });
 
   require('@fof-upload').components.FileManagerModal.prototype.showAllFiles =  () => {
-    if (document.querySelector('#allFilesButton').style.display == "inline") {
-      document.querySelector('#hideUserFileList').style.display = "block";
-      document.querySelector('#hideCurrentUserFileList').style.display = "none";
-      document.querySelector('#allFilesButton').style.display = "none";
-      document.querySelector('#currentFilesButton').style.display = "inline";
-    } else {
-      document.querySelector('#hideUserFileList').style.display = "none";
-      document.querySelector('#hideCurrentUserFileList').style.display = "block";
-      document.querySelector('#allFilesButton').style.display = "inline";
-      document.querySelector('#currentFilesButton').style.display = "none";
-    }
-    // console.log(this.selectedFiles);
+    app.forum.data.attributes.userFileListVisibility ^= true;
   }
 });
-
-// function showAllFiles() {
-  // document.querySelector('.Modal-body').append(
-  //   require('@fof-upload').components.UserFileList.component({
-  //     user: this.attrs.user
-  //   })
-    // <UserFileList
-    //   user={this.attrs.user}
-    //   selectable
-    //   onFileSelect={this.onFileSelect.bind(this)}
-    //   selectedFiles={this.selectedFiles}
-    //   restrictFileType={this.restrictFileType}
-    // /> 
-  // );
-// }
