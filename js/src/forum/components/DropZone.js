@@ -18,28 +18,31 @@ export default class DropZone extends Component {
         }
 
         return (
-            <div className='DropZone'>
-                {
-                    this.uploaded &&
-                    (UserFileList.component({
-                        user: this.attrs.user,
-                        selectable: true,
-                        onFileSelect: this.attrs.onFileSelect.bind(this),
-                        selectedFiles: this.attrs.selectedFiles,
-                        restrictFileType: this.attrs.restrictFileType
-                    }))
-                }
-                {
-                    this.uploaded && (
-                        <div className = 'UserFileList-buttons'>
-                        {Button.component({
-                            className: "Button Button--primary",
-                        },
-                        app.translator.trans('Transliterare')
-                        )}
-                        </div>
-                    )
-                }
+            <div >
+                <div className='NoDropZone'>
+                    {
+                        this.uploaded &&
+                        (UserFileList.component({
+                            user: this.attrs.user,
+                            selectable: true,
+                            onFileSelect: this.attrs.onFileSelect.bind(this),
+                            selectedFiles: this.attrs.selectedFiles,
+                            restrictFileType: this.attrs.restrictFileType
+                        }))
+                    }
+                    {
+                        this.uploaded && (
+                            <div className = 'UserFileList-buttons'>
+                            {Button.component({
+                                className: "Button Button--primary",
+                            },
+                            app.translator.trans('Transliterare')
+                            )}
+                            </div>
+                        )
+                    }
+                </div>
+                
                 
                 {!this.uploaded &&
                 (<div className="dropzone">

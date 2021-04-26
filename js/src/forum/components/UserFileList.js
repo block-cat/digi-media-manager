@@ -152,7 +152,7 @@ export default class UserFileList extends Component {
                 </ul>
 
                 {/* Load more files */}
-                {state.hasMoreResults() && (
+                {/* {state.hasMoreResults() && (
                     <div className={'fof-load-more-files'}>
                         <Button
                             className={'Button Button--primary'}
@@ -163,7 +163,7 @@ export default class UserFileList extends Component {
                             {app.translator.trans('fof-upload.forum.file_list.load_more_files_btn')}
                         </Button>
                     </div>
-                )}
+                )} */}
             </div>
         );
     }

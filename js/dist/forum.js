@@ -188,8 +188,8 @@ var DropZone = /*#__PURE__*/function (_Component) {
       this.uploaded = false;
     }
 
-    return m("div", {
-      className: "DropZone"
+    return m("div", null, m("div", {
+      className: "NoDropZone"
     }, this.uploaded && _UserFileList__WEBPACK_IMPORTED_MODULE_3__["default"].component({
       user: this.attrs.user,
       selectable: true,
@@ -200,7 +200,7 @@ var DropZone = /*#__PURE__*/function (_Component) {
       className: "UserFileList-buttons"
     }, flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       className: "Button Button--primary"
-    }, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('Transliterare'))), !this.uploaded && m("div", {
+    }, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('Transliterare')))), !this.uploaded && m("div", {
       className: "dropzone"
     }, m("div", {
       "class": "icon-container"
@@ -505,16 +505,7 @@ var UserFileList = /*#__PURE__*/function (_Component) {
         role: "status",
         "aria-label": app.translator.trans('fof-upload.forum.file_list.hide_file.loading')
       }, m(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4___default.a, null)))));
-    })), state.hasMoreResults() && m("div", {
-      className: 'fof-load-more-files'
-    }, m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a, {
-      className: 'Button Button--primary',
-      disabled: state.isLoading(),
-      loading: state.isLoading(),
-      onclick: function onclick() {
-        return state.loadMore();
-      }
-    }, app.translator.trans('fof-upload.forum.file_list.load_more_files_btn'))));
+    })));
   }
   /**
    * Execute function on file click
