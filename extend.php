@@ -15,7 +15,7 @@ use Flarum\Extend;
 
 return [
     (new Extend\Routes('api'))
-        ->get('/trans/texts', 'block-cat-dmm.texts', Api\Controllers\FindTransTexts::class),
+        ->get('/trans-texts', 'block-cat-dmm.texts', Api\Controllers\FindTransTexts::class),
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/resources/less/forum.less'),

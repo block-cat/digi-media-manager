@@ -10,11 +10,14 @@ export default class DropZone extends Component {
         this.uploaded = false;
         this.enable = false;
         this.loading = false;
+        this.content = '';
+        this.files = '';
 
         this.contor = 0;
     }
 
     view() {
+        // console.log(app);
         if (this.attrs.selectedFiles.length != 0) {
             this.uploaded = true;
         } else {
@@ -53,9 +56,19 @@ export default class DropZone extends Component {
                             <div className = 'UserFileList-buttons'>
                             {Button.component({
                                 className: "Button Button--primary",
+                                onclick: this.transliterate.bind(this),
+                                disabled: !this.enable,
+                                loading: this.loading
                             },
                             app.translator.trans('Transliterare')
                             )}
+                            {(this.files !== '') ?
+                            Button.component({
+                                className: "Button Button--primary",
+                                onclick: this.saveText.bind(this),
+                            },
+                            app.translator.trans('Arata')
+                            ) : ''}
                             </div>
                         )
                     }
@@ -78,30 +91,37 @@ export default class DropZone extends Component {
 
     transliterate() {
         this.loading = true;
-        // trans_file-name.txt
-        const data = new FormData();
+        let params = {};
 
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
 
-            data.append('file', file.url());
+            if (file.type().includes('image/') || file.type() === 'application/pdf') {
+                eval(`params.id_${file.id()} = ${file.id()}`);
+            }
         });
 
         return app
             .request({
                 method: 'GET',
-                url: app.forum.attribute('apiUrl') + '/trans/texts',
-                body: data
+                url: app.forum.attribute('apiUrl') + '/trans-texts',
+                params: params,
             })
-            .then((result) => console.log(result))
+            .then((data) => {
+                    this.files = data.data;
+                    this.loading = false;
+
+                    m.redraw();
+                })
             .catch((error) => {
                 this.loading = false;
-                m.redraw();
 
+                m.redraw();
                 throw error;
             });
-            // console.log(file.type());
-        // console.log(app);
-        // console.log(this.attrs.selectedFiles);
+    }
+
+    saveText() {
+        console.log(this.files);
     }
 }
