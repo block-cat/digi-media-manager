@@ -1,5 +1,7 @@
 digi-media-manager:
   forum:
+    all_files: 'All files'
+    current_files: 'Current files'
     dropzone:
       title: 'Drag and drop here'
       subtitle: 'or upload using the right-corner button'
@@ -8,4 +10,3 @@ digi-media-manager:
       errors:
         file_not_found: 'not found! Try again!'
         another_server: 'placed on another server!'
-
