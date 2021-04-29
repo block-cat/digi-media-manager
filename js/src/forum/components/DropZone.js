@@ -41,7 +41,7 @@ export default class DropZone extends Component {
         return (
             <div >
                 <div className="div_loading">
-                    <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" />
+                    <img src="https://digi.emoldova.org/assets/files/2021-04-29/1619697698-204093-cyr-ocr-animation.gif" />
                 </div>
                 <div className='NoDropZone'>
                     {
