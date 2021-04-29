@@ -17,7 +17,6 @@ export default class DropZone extends Component {
     }
 
     view() {
-        // console.log(app);
         if (this.attrs.selectedFiles.length != 0) {
             this.uploaded = true;
         } else {
@@ -56,22 +55,22 @@ export default class DropZone extends Component {
                     }
                     {
                         this.uploaded && (
-                            <div className='UserFileList-buttons'>
-                                {Button.component({
-                                    className: "Button Button--primary button_transliterare",
-                                    onclick: this.transliterate.bind(this),
-                                    disabled: !this.enable,
-                                    loading: this.loading
-                                },
-                                    app.translator.trans('Transliterare')
-                                )}
-                                {(this.files !== '') ?
-                                    Button.component({
-                                        className: "Button Button--primary button_transliterare",
-                                        onclick: this.saveText.bind(this),
-                                    },
-                                        app.translator.trans('Arata')
-                                    ) : ''}
+                            <div className = 'UserFileList-buttons'>
+                            {Button.component({
+                                className: "Button Button--primary button_transliterare",
+                                onclick: this.transliterate.bind(this),
+                                disabled: !this.enable,
+                                loading: this.loading
+                            },
+                            app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
+                            )}
+                            {(this.files !== '') ?
+                            Button.component({
+                                className: "Button Button--primary button_transliterare",
+                                onclick: this.addFilesAndText.bind(this),
+                            },
+                            app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
+                            ) : ''}
                             </div>
                         )
                     }
@@ -94,7 +93,8 @@ export default class DropZone extends Component {
 
     transliterate() {
         this.loading = true;
-        let params = {};
+        this.files = '';
+        let params = {user_id: app.session.user.id()};
 
         document.getElementsByClassName("div_loading")[0].style.display = "block";
 
@@ -126,7 +126,22 @@ export default class DropZone extends Component {
             });
     }
 
-    saveText() {
-        console.log(this.files);
+    addFilesAndText() {
+        app.modal.close();
+
+        let k = 0;
+        this.attrs.selectedFiles.map((fileId) => {
+            const file = app.store.getById('files', fileId);
+
+            try {
+                if(file.id() === this.files[k].id) {
+                    app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
+                    app.composer.editor.insertAtCursor(this.files[k++].attributes.url + '\n\n');
+                }
+            } catch (error) {
+                k++;
+                app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
+            }
+        });
     }
 }

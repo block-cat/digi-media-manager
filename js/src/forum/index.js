@@ -57,7 +57,8 @@ app.initializers.add('block-cat/digi-media-manager', () => {
                     user: this.attrs.user,
                     onFileSelect: this.onFileSelect.bind(this),
                     selectedFiles: this.selectedFiles,
-                    restrictFileType: this.restrictFileType
+                    restrictFileType: this.restrictFileType,
+                    onSelect: this.onSelect.bind(this)
                   })
                 }
               </div>
