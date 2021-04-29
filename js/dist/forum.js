@@ -209,6 +209,10 @@ var DropZone = /*#__PURE__*/function (_Component) {
       }
     });
     return m("div", null, m("div", {
+      className: "div_loading"
+    }, m("img", {
+      src: "https://digi.emoldova.org/assets/files/2021-04-29/1619697698-204093-cyr-ocr-animation.gif"
+    })), m("div", {
       className: "NoDropZone"
     }, this.uploaded && _UserFileList__WEBPACK_IMPORTED_MODULE_3__["default"].component({
       user: this.attrs.user,
@@ -219,12 +223,12 @@ var DropZone = /*#__PURE__*/function (_Component) {
     }), this.uploaded && m("div", {
       className: "UserFileList-buttons"
     }, flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
-      className: "Button Button--primary",
+      className: "Button Button--primary button_transliterare",
       onclick: this.transliterate.bind(this),
       disabled: !this.enable,
       loading: this.loading
     }, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')), this.files !== '' ? flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
-      className: "Button Button--primary",
+      className: "Button Button--primary button_transliterare",
       onclick: this.addFilesAndText.bind(this)
     }, flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)) : '')), !this.uploaded && m("div", {
       className: "dropzone"
@@ -247,6 +251,7 @@ var DropZone = /*#__PURE__*/function (_Component) {
     var params = {
       user_id: flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()
     };
+    document.getElementsByClassName("div_loading")[0].style.display = "block";
     flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.fileListState.files.map(function (file) {
       if (!_this2.attrs.selectedFiles.includes(file.id())) return;
 
@@ -261,9 +266,11 @@ var DropZone = /*#__PURE__*/function (_Component) {
     }).then(function (data) {
       _this2.files = data.data;
       _this2.loading = false;
+      document.getElementsByClassName("div_loading")[0].style.display = "none";
       m.redraw();
     })["catch"](function (error) {
       _this2.loading = false;
+      document.getElementsByClassName("div_loading")[0].style.display = "none";
       m.redraw();
       throw error;
     });
