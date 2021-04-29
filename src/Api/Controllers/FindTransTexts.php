@@ -9,33 +9,52 @@ use Flarum\Foundation\Paths;
 
 use FoF\Upload\File;
 use FoF\Upload\Api\Serializers\FileSerializer;
+use Flarum\Foundation\ValidationException;
+use Flarum\Locale\Translator;
+use Laminas\HttpHandlerRunner\Exception\EmitterException;
 
 class FindTransTexts extends AbstractListController {
+    // Need for serialize...
+    // After return $result
     public $serializer = FileSerializer::class;
     protected $path;
+    protected $translator;
 
-    public function __construct(Paths $paths)
+    public function __construct(Paths $paths, Translator $translator)
     {
         $this->path = $paths->public;
+        $this->translator = $translator;
     }
 
     protected function data(ServerRequestInterface $request, Document $document) {
+        // Get sent params on request
         $params = $request->getQueryParams();
 
+        // Extract 'user_id' from params
+        $userId = array_shift($params);
+
+        // Set all sent file ids from params in array
         $sentFileIds = [];
         foreach ($params as $param) {
             array_push($sentFileIds, $param);
         }
         
-        $query = File::where('actor_id', '1')->whereIn('id', $sentFileIds);
+        // Set query depends on 'user_id' and file ids
+        $query = File::where('actor_id', $userId)->whereIn('id', $sentFileIds);
         
+        // Get all files from database
+        // depends on 'user_id' and file ids
+        // and order 'desc'
         $results = $query
         ->orderBy('id', 'desc')
         ->get();
         
-        $content = '';
-        
+        sleep(1*60);
+
         foreach ($results as $result) {
+            if (strpos($result->url, "imgur") !== false) {
+                throw new ValidationException(['file' => $result->url . " " . $this->translator->trans('digi-media-manager.forum.dropzone.errors.another_server')]);
+            }
             $pos = strrpos($result->path, "\\");
             $last_str = substr($result->path, $pos + 1);
             $filePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
@@ -50,11 +69,14 @@ class FindTransTexts extends AbstractListController {
 
             $fileTextPath = substr_replace($filePath, ".txt", $pos);
 
-            $result->url = file_get_contents($this->path . "/assets/files/" . $fileTextPath);
-            // var_dump($content);
+            
+            if (file_exists($this->path . "/assets/files/" . $fileTextPath)) {
+                $result->url = file_get_contents($this->path . "/assets/files/" . $fileTextPath);
+            } else {
+                throw new ValidationException(['file' => $fileTextPath . " " . $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
+            }
         }
 
-        // var_dump($arr);
         return $results;
     }
 }

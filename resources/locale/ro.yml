@@ -5,3 +5,8 @@ digi-media-manager:
     dropzone:
       title: 'Trage fișiere aici'
       subtitle: 'sau folosește butonul „Încarcă”'
+      transliterate_button: 'Transliterare'
+      add_to_composer_button: 'Selecteză fișierul cu text|Selecteză fișierele cu text'
+      errors:
+        file_not_found: 'nu a fost găsit! Încercați încă o data!'
+        another_server: 'este plasat pe un alt server!'

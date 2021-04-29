@@ -17,7 +17,6 @@ export default class DropZone extends Component {
     }
 
     view() {
-        // console.log(app);
         if (this.attrs.selectedFiles.length != 0) {
             this.uploaded = true;
         } else {
@@ -60,14 +59,14 @@ export default class DropZone extends Component {
                                 disabled: !this.enable,
                                 loading: this.loading
                             },
-                            app.translator.trans('Transliterare')
+                            app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
                             )}
                             {(this.files !== '') ?
                             Button.component({
                                 className: "Button Button--primary",
-                                onclick: this.saveText.bind(this),
+                                onclick: this.addFilesAndText.bind(this),
                             },
-                            app.translator.trans('Arata')
+                            app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
                             ) : ''}
                             </div>
                         )
@@ -91,7 +90,8 @@ export default class DropZone extends Component {
 
     transliterate() {
         this.loading = true;
-        let params = {};
+        this.files = '';
+        let params = {user_id: app.session.user.id()};
 
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
@@ -121,7 +121,22 @@ export default class DropZone extends Component {
             });
     }
 
-    saveText() {
-        console.log(this.files);
+    addFilesAndText() {
+        app.modal.close();
+
+        let k = 0;
+        this.attrs.selectedFiles.map((fileId) => {
+            const file = app.store.getById('files', fileId);
+
+            try {
+                if(file.id() === this.files[k].id) {
+                    app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
+                    app.composer.editor.insertAtCursor(this.files[k++].attributes.url + '\n\n');
+                }
+            } catch (error) {
+                k++;
+                app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
+            }
+        });
     }
 }
