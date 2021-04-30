@@ -101,6 +101,8 @@ export default class DropZone extends Component {
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
 
+            if (file.url().includes('imgur')) return;
+
             if (file.type().includes('image/') || file.type() === 'application/pdf') {
                 eval(`params.id_${file.id()} = ${file.id()}`);
             }
