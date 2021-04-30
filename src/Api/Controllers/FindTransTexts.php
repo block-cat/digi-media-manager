@@ -48,13 +48,8 @@ class FindTransTexts extends AbstractListController {
         $results = $query
         ->orderBy('id', 'desc')
         ->get();
-        
-        sleep(1*60);
 
         foreach ($results as $result) {
-            if (strpos($result->url, "imgur") !== false) {
-                throw new ValidationException(['file' => $result->url . " " . $this->translator->trans('digi-media-manager.forum.dropzone.errors.another_server')]);
-            }
             $pos = strrpos($result->path, "\\");
             $last_str = substr($result->path, $pos + 1);
             $filePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
@@ -69,12 +64,20 @@ class FindTransTexts extends AbstractListController {
 
             $fileTextPath = substr_replace($filePath, ".txt", $pos);
 
-            
-            if (file_exists($this->path . "/assets/files/" . $fileTextPath)) {
-                $result->url = file_get_contents($this->path . "/assets/files/" . $fileTextPath);
-            } else {
-                throw new ValidationException(['file' => $fileTextPath . " " . $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
+            $time = 0;
+            $maxTime = 5; // 5 minutes
+            $timeToSleep = 5;  // seconds
+
+            while(!file_exists($this->path . "/assets/files/" . $fileTextPath) && $time < $maxTime * 60 / 5) {
+                sleep($timeToSleep);
+                $time++;
             }
+
+            if ($time >= $maxTime * 60 / 5) {
+                throw new ValidationException(['file' => "Time limit overload!"]);
+            }
+            
+            $result->url = file_get_contents($this->path . "/assets/files/" . $fileTextPath);
         }
 
         return $results;
