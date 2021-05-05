@@ -11,7 +11,6 @@ use FoF\Upload\File;
 use FoF\Upload\Api\Serializers\FileSerializer;
 use Flarum\Foundation\ValidationException;
 use Flarum\Locale\Translator;
-use Laminas\HttpHandlerRunner\Exception\EmitterException;
 
 class FindTransTexts extends AbstractListController {
     // Need for serialize...
@@ -50,34 +49,46 @@ class FindTransTexts extends AbstractListController {
         ->get();
 
         foreach ($results as $result) {
-            $pos = strrpos($result->path, "\\");
-            $last_str = substr($result->path, $pos + 1);
-            $filePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
-            
-            if (str_ends_with($filePath, '.jpg') || str_ends_with($filePath, '.png')
-                || str_ends_with($filePath, '.pdf')) {
+            if (strrpos($result->path, "\\")) {
+                // used for localhost
+                $pos = strrpos($result->path, "\\");
+                $last_str = substr($result->path, $pos + 1);
+                $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
+            } else {
+                // used for digi.emoldova.org
+                $pos = strrpos($result->path, "/");
+                $last_str = substr($result->path, $pos + 1);
+                $transFilePath = substr_replace($result->path, "/trans_" . $last_str, $pos);
+            }
+
+            $cyrFilePath = $result->path;
+
+            if (str_ends_with($transFilePath, '.jpg') || str_ends_with($transFilePath, '.png')
+                || str_ends_with($transFilePath, '.pdf')) {
                     $pos = -4;
                 };
-            if (str_ends_with($filePath, '.jpeg') || str_ends_with($filePath, '.tiff')) {
+            if (str_ends_with($transFilePath, '.jpeg') || str_ends_with($transFilePath, '.tiff')) {
                     $pos = -5;
                 };
 
-            $fileTextPath = substr_replace($filePath, ".txt", $pos);
+            $cyrTextPath = substr_replace($cyrFilePath, ".txt", $pos);
+            $transTextPath = substr_replace($transFilePath, ".txt", $pos);
 
             $time = 0;
             $maxTime = 5; // 5 minutes
             $timeToSleep = 5;  // seconds
 
-            while(!file_exists($this->path . "/assets/files/" . $fileTextPath) && $time < $maxTime * 60 / 5) {
+            while(!file_exists($this->path . "/assets/files/" . $transTextPath) && $time < $maxTime * 60 / 5) {
                 sleep($timeToSleep);
                 $time++;
             }
 
             if ($time >= $maxTime * 60 / 5) {
-                throw new ValidationException(['file' => "Time limit overload!"]);
+                throw new ValidationException(['file' => $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
             }
             
-            $result->url = file_get_contents($this->path . "/assets/files/" . $fileTextPath);
+            $result->path = file_get_contents($this->path . "/assets/files/" . $cyrTextPath);
+            $result->url = file_get_contents($this->path . "/assets/files/" . $transTextPath);
         }
 
         return $results;

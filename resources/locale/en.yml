@@ -8,5 +8,4 @@ digi-media-manager:
       transliterate_button: 'Transliterate'
       add_to_composer_button: 'Select file with text|Select files with text'
       errors:
-        file_not_found: 'not found! Try again!'
-        another_server: 'placed on another server!'
+        file_not_found: 'Needed files not found! Please try again later!'

@@ -39,9 +39,14 @@ export default class DropZone extends Component {
 
         return (
             <div >
-                <div className="div_loading">
-                    <img src="https://digi.emoldova.org/assets/files/2021-04-29/1619697698-204093-cyr-ocr-animation.gif" />
-                </div>
+                {
+                    this.loading &&
+                    (
+                        <div className="div_loading">
+                            <img src="https://digi.emoldova.org/assets/files/2021-04-29/1619697698-204093-cyr-ocr-animation.gif" />
+                        </div>
+                    )
+                }
                 <div className='NoDropZone'>
                     {
                         this.uploaded &&
@@ -96,8 +101,6 @@ export default class DropZone extends Component {
         this.files = '';
         let params = {user_id: app.session.user.id()};
 
-        document.getElementsByClassName("div_loading")[0].style.display = "block";
-
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
 
@@ -117,12 +120,10 @@ export default class DropZone extends Component {
             .then((data) => {
                 this.files = data.data;
                 this.loading = false;
-                document.getElementsByClassName("div_loading")[0].style.display = "none";
                 m.redraw();
             })
             .catch((error) => {
                 this.loading = false;
-                document.getElementsByClassName("div_loading")[0].style.display = "none";
                 m.redraw();
                 throw error;
             });
@@ -138,7 +139,8 @@ export default class DropZone extends Component {
             try {
                 if(file.id() === this.files[k].id) {
                     app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-                    app.composer.editor.insertAtCursor(this.files[k++].attributes.url + '\n\n');
+                    app.composer.editor.insertAtCursor('[span class="transliteratedText"]' + this.files[k].attributes.url + '[/span]\n\n');
+                    app.composer.editor.insertAtCursor('[span class="cyrilicText"]' + this.files[k++].attributes.path + '[/span]\n\n');
                 }
             } catch (error) {
                 k++;

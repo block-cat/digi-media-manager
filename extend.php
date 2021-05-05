@@ -12,6 +12,7 @@
 namespace BlockCat\DigiMediaManager;
 
 use Flarum\Extend;
+use s9e\TextFormatter\Configurator;
 
 return [
     (new Extend\Routes('api'))
@@ -22,5 +23,12 @@ return [
     // (new Extend\Frontend('admin'))
     //     ->js(__DIR__.'/js/dist/admin.js')
     //     ->css(__DIR__.'/resources/less/admin.less'),
-    new Extend\Locales(__DIR__ . '/resources/locale')
+    new Extend\Locales(__DIR__ . '/resources/locale'),
+    (new Extend\Formatter)
+        ->configure(function(Configurator $config) {
+            $config->BBCodes->addCustom(
+                '[span class={TEXT1?}]{TEXT2}[/span]',
+                '<span class="{TEXT1}">{TEXT2}</span>'
+            );
+        })
 ];
