@@ -27,8 +27,12 @@ return [
     (new Extend\Formatter)
         ->configure(function(Configurator $config) {
             $config->BBCodes->addCustom(
-                '[span class={TEXT1?}]{TEXT2}[/span]',
-                '<span class="{TEXT1}">{TEXT2}</span>'
+                '[chirilic]{TEXT}[/chirilic]',
+                '<span class="chirilic">{TEXT}</span>'
+            );
+            $config->BBCodes->addCustom(
+                '[transliterat]{TEXT}[/transliterat]',
+                '<span class="transliterat">{TEXT}</span>'
             );
         })
 ];
