@@ -9,14 +9,6 @@ app.initializers.add('block-cat/digi-media-manager', () => {
     app.forum.data.attributes.userFileListVisibility = false;
   });
 
-  override(require('@fof-upload').components.FileManagerButton.prototype, 'view', function(original) {
-    return Button.component({
-      className: 'Button fof-upload-button Button--icon',
-      onclick: this.fileManagerButtonClicked.bind(this),
-      icon: 'fas fa-folder-open',
-      title: app.translator.trans('fof-upload.forum.buttons.media'),
-    });
-  });
 
   override(require('@fof-upload').components.FileManagerModal.prototype, 'view', function(original) {
     return (
