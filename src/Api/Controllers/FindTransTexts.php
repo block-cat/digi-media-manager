@@ -49,18 +49,18 @@ class FindTransTexts extends AbstractListController {
         ->get();
 
         foreach ($results as $result) {
-            if (strrpos($result->path, "\\")) {
-                // used for localhost
-                $pos = strrpos($result->path, "\\");
-                $last_str = substr($result->path, $pos + 1);
-                $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
-            } else {
+            if (strrpos($result->path, "/")) {
                 // used for digi.emoldova.org
                 $pos = strrpos($result->path, "/");
                 $last_str = substr($result->path, $pos + 1);
                 $transFilePath = substr_replace($result->path, "/trans_" . $last_str, $pos);
+            } else {
+                // used for localhost
+                $pos = strrpos($result->path, "\\");
+                $last_str = substr($result->path, $pos + 1);
+                $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
             }
-
+            
             $cyrFilePath = $result->path;
 
             if (str_ends_with($transFilePath, '.jpg') || str_ends_with($transFilePath, '.png')
