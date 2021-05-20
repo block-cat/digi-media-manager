@@ -251,31 +251,70 @@ var DropZone = /*#__PURE__*/function (_Component) {
     var params = {
       user_id: flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()
     };
+    var maxFileSize = 0;
     flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.fileListState.files.map(function (file) {
       if (!_this2.attrs.selectedFiles.includes(file.id())) return;
       if (file.url().includes('imgur')) return;
 
       if (file.type().includes('image/') || file.type() === 'application/pdf') {
         eval("params.id_" + file.id() + " = " + file.id());
+
+        if (file.size() > maxFileSize) {
+          maxFileSize = file.size();
+        }
       }
     });
+
+    if (maxFileSize === 0) {
+      alert('One or more files no corresponding with requirement!');
+      this.loading = false;
+      m.redraw();
+      return;
+    }
+
+    if (maxFileSize < 10485760) {
+      // less than 10 MB
+      this.request(params);
+      return;
+    }
+
+    if (maxFileSize >= 10485760 && maxFileSize < 20971520) {
+      // between 10 MB and 20 MB
+      setTimeout(function () {
+        _this2.request(params);
+      }, 1000 * 60); // 1 minute... method one
+
+      return;
+    }
+
+    if (maxFileSize >= 20971520) {
+      // more than 20 MB
+      setTimeout(this.request, 1000 * 60 * 2, params); // 2 minute... method two
+
+      return;
+    }
+  };
+
+  _proto.request = function request(params) {
+    var _this3 = this;
+
     return flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.request({
       method: 'GET',
       url: flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('apiUrl') + '/trans-texts',
       params: params
     }).then(function (data) {
-      _this2.files = data.data;
-      _this2.loading = false;
+      _this3.files = data.data;
+      _this3.loading = false;
       m.redraw();
     })["catch"](function (error) {
-      _this2.loading = false;
+      _this3.loading = false;
       m.redraw();
       throw error;
     });
   };
 
   _proto.addFilesAndText = function addFilesAndText() {
-    var _this3 = this;
+    var _this4 = this;
 
     flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.close();
     var k = 0;
@@ -283,10 +322,10 @@ var DropZone = /*#__PURE__*/function (_Component) {
       var file = flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.store.getById('files', fileId);
 
       try {
-        if (file.id() === _this3.files[k].id) {
+        if (file.id() === _this4.files[k].id) {
           flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-          flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.composer.editor.insertAtCursor('[transliterat]' + _this3.files[k].attributes.url + '[/transliterat]\n\n');
-          flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.composer.editor.insertAtCursor('[chirilic]' + _this3.files[k++].attributes.path + '[/chirilic]\n\n');
+          flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.composer.editor.insertAtCursor('[transliterat]\n' + _this4.files[k].attributes.url + '\n[/transliterat]\n\n');
+          flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.composer.editor.insertAtCursor('[chirilic]\n' + _this4.files[k++].attributes.path + '\n[/chirilic]\n\n');
         }
       } catch (error) {
         k++;

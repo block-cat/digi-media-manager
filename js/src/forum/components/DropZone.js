@@ -100,17 +100,42 @@ export default class DropZone extends Component {
         this.loading = true;
         this.files = '';
         let params = {user_id: app.session.user.id()};
+        let maxFileSize = 0;
 
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
 
             if (file.url().includes('imgur')) return;
-
+            
             if (file.type().includes('image/') || file.type() === 'application/pdf') {
                 eval(`params.id_${file.id()} = ${file.id()}`);
+                if (file.size() > maxFileSize) {
+                    maxFileSize = file.size();
+                }
             }
         });
 
+        if (maxFileSize === 0) {
+            alert('One or more files no corresponding with requirement!');
+            this.loading = false;
+            m.redraw();
+            return;
+        }
+        if (maxFileSize < 10485760) { // less than 10 MB
+            this.request(params);
+            return;
+        }
+        if (maxFileSize >= 10485760 && maxFileSize < 20971520) { // between 10 MB and 20 MB
+            setTimeout(() => {this.request(params)}, 1000 * 60); // 1 minute... method one
+            return;
+        }
+        if (maxFileSize >= 20971520) { // more than 20 MB
+            setTimeout(this.request, 1000 * 60 * 2, params); // 2 minute... method two
+            return;
+        }
+    }
+
+    request(params) {
         return app
             .request({
                 method: 'GET',
@@ -139,8 +164,8 @@ export default class DropZone extends Component {
             try {
                 if(file.id() === this.files[k].id) {
                     app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-                    app.composer.editor.insertAtCursor('[transliterat]' + this.files[k].attributes.url + '[/transliterat]\n\n');
-                    app.composer.editor.insertAtCursor('[chirilic]' + this.files[k++].attributes.path + '[/chirilic]\n\n');
+                    app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
+                    app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
                 }
             } catch (error) {
                 k++;
