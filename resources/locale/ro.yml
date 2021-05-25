@@ -7,5 +7,7 @@ digi-media-manager:
       subtitle: 'sau folosește butonul „Încarcă”'
       transliterate_button: 'Transliterare'
       add_to_composer_button: 'Selecteză fișierul cu text|Selecteză fișierele cu text'
+      checkbox_text_original: 'Text original (chirilică)'
+      checkbox_text_transliterat: 'Text transliterat'
       errors:
         file_not_found: 'Fișierele necesare nu au fost găsite! Vă rugăm încercați mai târziu!'

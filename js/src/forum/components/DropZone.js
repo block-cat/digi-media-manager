@@ -2,6 +2,7 @@ import app from 'flarum/common/app';
 import Component from 'flarum/common/Component';
 import UserFileList from './UserFileList';
 import Button from 'flarum/common/components/Button';
+import Stream from 'flarum/common/utils/Stream';
 
 export default class DropZone extends Component {
     oninit(vnode) {
@@ -11,6 +12,9 @@ export default class DropZone extends Component {
         this.enable = false;
         this.loading = false;
         this.content = '';
+        this.files = '';
+        this.text_original = Stream(!!this.attrs.text_original);
+        this.text_transliterat = Stream(!!this.attrs.text_transliterat);
         this.files = '';
 
         this.contor = 0;
@@ -60,24 +64,44 @@ export default class DropZone extends Component {
                     }
                     {
                         this.uploaded && (
-                            <div className = 'UserFileList-buttons'>
-                            {Button.component({
-                                className: "Button Button--primary button_transliterare",
-                                onclick: this.transliterate.bind(this),
-                                disabled: !this.enable,
-                                loading: this.loading
-                            },
-                            app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
-                            )}
-                            {(this.files !== '') ?
-                            Button.component({
-                                className: "Button Button--primary button_transliterare",
-                                onclick: this.addFilesAndText.bind(this),
-                            },
-                            app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
-                            ) : ''}
+                            <div className='UserFileList-buttons'>
+                                {Button.component({
+                                    className: "Button Button--primary button_transliterare",
+                                    onclick: this.transliterate.bind(this),
+                                    disabled: !this.enable,
+                                    loading: this.loading
+                                },
+                                    app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
+                                )}
+                                {(this.files !== '') ?
+                                    Button.component({
+                                        className: "Button Button--primary button_transliterare",
+                                        onclick: this.addFilesAndText.bind(this),
+                                    },
+                                        app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
+                                    ) : ''}
+                                {this.files && (
+                                    <div className='UserFileList-text'>
+                                        <h3 class>Textul din imagine a fost recunoscut si transliterat. Selecteaza textul/textele pentru a continua.</h3>
+                                        <div className="Form-group">
+                                            <div>
+                                                <label className="checkbox">
+                                                    <input type="checkbox" bidi={this.text_original} oncha disabled={this.loading} />
+                                                    {app.translator.trans('digi-media-manager.forum.dropzone.checkbox_text_original')}
+                                                </label>
+                                                <label className="checkbox">
+                                                    <input type="checkbox" bidi={this.text_transliterat} disabled={this.loading} />
+                                                    {app.translator.trans('digi-media-manager.forum.dropzone.checkbox_text_transliterat')}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                )
+                                }
                             </div>
                         )
+
                     }
                 </div>
 
@@ -99,14 +123,14 @@ export default class DropZone extends Component {
     transliterate() {
         this.loading = true;
         this.files = '';
-        let params = {user_id: app.session.user.id()};
+        let params = { user_id: app.session.user.id() };
         let maxFileSize = 0;
 
         app.fileListState.files.map((file) => {
             if (!this.attrs.selectedFiles.includes(file.id())) return;
 
             if (file.url().includes('imgur')) return;
-            
+
             if (file.type().includes('image/') || file.type() === 'application/pdf') {
                 eval(`params.id_${file.id()} = ${file.id()}`);
                 if (file.size() > maxFileSize) {
@@ -126,7 +150,7 @@ export default class DropZone extends Component {
             return;
         }
         if (maxFileSize >= 10485760 && maxFileSize < 20971520) { // between 10 MB and 20 MB
-            setTimeout(() => {this.request(params)}, 1000 * 60); // 1 minute... method one
+            setTimeout(() => { this.request(params) }, 1000 * 60); // 1 minute... method one
             return;
         }
         if (maxFileSize >= 20971520) { // more than 20 MB
@@ -162,10 +186,15 @@ export default class DropZone extends Component {
             const file = app.store.getById('files', fileId);
 
             try {
-                if(file.id() === this.files[k].id) {
+                if (file.id() === this.files[k].id) {
                     app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-                    app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
-                    app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
+                    if (this.text_original) {
+                        app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
+                    }
+                    if (this.text_transliterat) {
+                        app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
+                    }
+                    
                 }
             } catch (error) {
                 k++;

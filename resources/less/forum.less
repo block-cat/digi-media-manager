@@ -23,15 +23,62 @@
     display: flex;
 
     .fof-upload-file-list {
-        width: 75%;
     }
     
     .UserFileList-buttons {
-        width: 25%;
         text-align: center;
     }
+    
+    .UserFileList-text {
+        text-align: left;
+        padding-left: 10px;
+        h3 {
+            font-weight: 500 !important;
+        }
+    }
 }
-
+@media (min-width: 767px) {
+    .NoDropZone {
+        .fof-upload-file-list {
+            width: 65%;
+        }
+        
+        .UserFileList-buttons {
+            width: 35%;
+            padding-left: 5%;
+        }
+        
+        .UserFileList-text {
+            text-align: left;
+        }
+    }
+    .div_loading > img {
+        max-width: 40%;
+    }
+}
+@media (max-width: 767px) {
+    .NoDropZone {
+        flex-direction: column;
+        padding: 10px;
+        .fof-upload-file-list {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+        
+        .UserFileList-buttons {
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .UserFileList-text {
+            text-align: left;
+        }
+    }
+    .div_loading > img {
+        max-width: 70%;
+    }
+}
 #allFilesButton, #currentFilesButton{
     float: left;
 }
@@ -42,15 +89,23 @@
     flex-direction: column;
     align-self: center
 }
+.UserFileList-text{
+    display: flex;
+    flex-direction: column;
+    align-self: center
+}
 .button_transliterare {
+    font-weight: 400;
+    letter-spacing: 0.06rem;
     word-break: break-all;
     white-space: normal;
-    margin-top: 10px;
-    margin-bottom: 10%;
-    padding: 24px;
-    width: 90%;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 100%;
     height: 35%;
-    font-size: 1.2rem;
+    font-size: 1.17rem;
     border-radius: 1rem;
     box-shadow: 0px 6px 15px rgba(0,0,0, 0.3);
     align-self: center;
@@ -74,11 +129,14 @@
     to {opacity: 1;}
   }
 .div_loading > img {
-    max-width: 40%;
     transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
     position: absolute;
     max-height: 80%;
     border: 5px solid #506C90;
+}
+
+.fof-upload-file-list ul {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
 }

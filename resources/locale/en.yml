@@ -7,5 +7,7 @@ digi-media-manager:
       subtitle: 'or upload using the right-corner button'
       transliterate_button: 'Transliterate'
       add_to_composer_button: 'Select file with text|Select files with text'
+      checkbox_text_original: 'Text original (chirilică)'
+      checkbox_text_transliterat: 'Text transliterat'
       errors:
         file_not_found: 'Needed files not found! Please try again later!'
