@@ -6,7 +6,7 @@ digi-media-manager:
       title: 'Drag and drop here'
       subtitle: 'or upload using the right-corner button'
       transliterate_button: 'Transliterate'
-      add_to_composer_button: 'Select file with text|Select files with text'
+      add_to_composer_button: 'Continuă'
       checkbox_text_original: 'Text original (chirilică)'
       checkbox_text_transliterat: 'Text transliterat'
       errors:

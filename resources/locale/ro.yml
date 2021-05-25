@@ -6,7 +6,7 @@ digi-media-manager:
       title: 'Trage fișiere aici'
       subtitle: 'sau folosește butonul „Încarcă”'
       transliterate_button: 'Transliterare'
-      add_to_composer_button: 'Selecteză fișierul cu text|Selecteză fișierele cu text'
+      add_to_composer_button: 'Continuă'
       checkbox_text_original: 'Text original (chirilică)'
       checkbox_text_transliterat: 'Text transliterat'
       errors:

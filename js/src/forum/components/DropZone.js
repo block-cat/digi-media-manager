@@ -65,21 +65,18 @@ export default class DropZone extends Component {
                     {
                         this.uploaded && (
                             <div className='UserFileList-buttons'>
-                                {Button.component({
-                                    className: "Button Button--primary button_transliterare",
-                                    onclick: this.transliterate.bind(this),
-                                    disabled: !this.enable,
-                                    loading: this.loading
-                                },
-                                    app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
-                                )}
-                                {(this.files !== '') ?
-                                    Button.component({
-                                        className: "Button Button--primary button_transliterare",
-                                        onclick: this.addFilesAndText.bind(this),
-                                    },
-                                        app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
-                                    ) : ''}
+                                {
+                                    (!this.files !== '') ?
+                                        Button.component({
+                                            className: "Button Button--primary button_transliterare",
+                                            onclick: this.transliterate.bind(this),
+                                            disabled: !this.enable,
+                                            loading: this.loading
+                                        },
+                                            app.translator.trans('digi-media-manager.forum.dropzone.transliterate_button')
+                                        ) : ''
+                                }
+
                                 {this.files && (
                                     <div className='UserFileList-text'>
                                         <h3 class>Textul din imagine a fost recunoscut si transliterat. Selecteaza textul/textele pentru a continua.</h3>
@@ -99,6 +96,13 @@ export default class DropZone extends Component {
 
                                 )
                                 }
+                                {(this.files !== '') ?
+                                    Button.component({
+                                        className: "Button Button--primary button_transliterare",
+                                        onclick: this.addFilesAndText.bind(this),
+                                    },
+                                        app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
+                                    ) : ''}
                             </div>
                         )
 
@@ -194,7 +198,7 @@ export default class DropZone extends Component {
                     if (this.text_transliterat) {
                         app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
                     }
-                    
+
                 }
             } catch (error) {
                 k++;
