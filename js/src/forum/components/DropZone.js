@@ -66,7 +66,7 @@ export default class DropZone extends Component {
                         this.uploaded && (
                             <div className='UserFileList-buttons'>
                                 {
-                                    (!this.files !== '') ?
+                                    (this.files == '') ?
                                         Button.component({
                                             className: "Button Button--primary button_transliterare",
                                             onclick: this.transliterate.bind(this),
@@ -185,6 +185,11 @@ export default class DropZone extends Component {
     addFilesAndText() {
         app.modal.close();
 
+        const text_original = this.text_original();
+        const text_transliterat = this.text_transliterat();
+
+        console.log(text_original)
+
         let k = 0;
         this.attrs.selectedFiles.map((fileId) => {
             const file = app.store.getById('files', fileId);
@@ -192,10 +197,10 @@ export default class DropZone extends Component {
             try {
                 if (file.id() === this.files[k].id) {
                     app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-                    if (this.text_original) {
+                    if (text_original == true) {
                         app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
                     }
-                    if (this.text_transliterat) {
+                    if (text_transliterat == true) {
                         app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
                     }
 
