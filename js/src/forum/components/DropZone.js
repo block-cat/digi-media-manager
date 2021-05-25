@@ -197,10 +197,10 @@ export default class DropZone extends Component {
             try {
                 if (file.id() === this.files[k].id) {
                     app.composer.editor.insertAtCursor(file.bbcode() + '\n\n');
-                    if (text_original == true) {
+                    if (text_transliterat == true) {
                         app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
                     }
-                    if (text_transliterat == true) {
+                    if (text_original == true) {
                         app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
                     }
 
