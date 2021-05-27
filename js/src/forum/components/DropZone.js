@@ -188,8 +188,6 @@ export default class DropZone extends Component {
         const text_original = this.text_original();
         const text_transliterat = this.text_transliterat();
 
-        console.log(text_original)
-
         let k = 0;
         this.attrs.selectedFiles.map((fileId) => {
             const file = app.store.getById('files', fileId);
@@ -201,9 +199,9 @@ export default class DropZone extends Component {
                         app.composer.editor.insertAtCursor('[transliterat]\n' + this.files[k].attributes.url + '\n[/transliterat]\n\n');
                     }
                     if (text_original == true) {
-                        app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k++].attributes.path + '\n[/chirilic]\n\n');
+                        app.composer.editor.insertAtCursor('[chirilic]\n' + this.files[k].attributes.path + '\n[/chirilic]\n\n');
                     }
-
+                    k++;
                 }
             } catch (error) {
                 k++;
