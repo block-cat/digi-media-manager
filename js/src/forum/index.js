@@ -83,7 +83,7 @@ app.initializers.add('block-cat/digi-media-manager', () => {
                     disabled={this.selectedFiles.length === 0 || (!this.multiSelect && this.selectedFiles.length > 1)}
                     className="Button Button--primary"
                 >
-                    {app.translator.transChoice('fof-upload.forum.file_list.confirm_selection_btn', this.selectedFiles.length)}
+                    {app.translator.trans('fof-upload.forum.file_list.confirm_selection_btn', { fileCount: this.selectedFiles.length })}
                 </Button>
               </div>
           </div>

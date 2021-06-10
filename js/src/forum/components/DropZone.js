@@ -101,7 +101,7 @@ export default class DropZone extends Component {
                                         className: "Button Button--primary button_transliterare",
                                         onclick: this.addFilesAndText.bind(this),
                                     },
-                                        app.translator.transChoice('digi-media-manager.forum.dropzone.add_to_composer_button', this.attrs.selectedFiles.length)
+                                        app.translator.trans('digi-media-manager.forum.dropzone.add_to_composer_button')
                                     ) : ''}
                             </div>
                         )
