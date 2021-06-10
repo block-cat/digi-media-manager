@@ -75,7 +75,7 @@ class FindTransTexts extends AbstractListController {
             $transTextPath = substr_replace($transFilePath, ".txt", $pos);
 
             $time = 0;
-            $maxTime = 5; // 5 minutes
+            $maxTime = 0.9; // 0.9 minutes
             $timeToSleep = 5;  // 5 seconds
 
             while(!file_exists($this->path . "/assets/files/" . $transTextPath) && $time < $maxTime * 60 / 5) {

@@ -12,6 +12,9 @@
 namespace BlockCat\DigiMediaManager;
 
 use Flarum\Extend;
+use Flarum\Discussion\DiscussionValidator;
+use Flarum\Post\PostValidator;
+use Illuminate\Support\Str;
 use s9e\TextFormatter\Configurator;
 
 return [
@@ -34,5 +37,41 @@ return [
                 '[transliterat]{TEXT}[/transliterat]',
                 '<span class="transliterat">{TEXT}</span>'
             );
-        })
+        }),
+    (new Extend\Validator(DiscussionValidator::class))
+        ->configure(function ($flarumValidator, $validator) {
+            $rules = $validator->getRules();
+
+            if (!array_key_exists('title', $rules)) {
+                return;
+            }
+
+            $rules['title'] = array_map(function(string $rule) {
+                if (Str::startsWith($rule, 'max:')) {
+                    return 'max:200';
+                }
+                
+                return $rule;
+            }, $rules['title']);
+
+            $validator->setRules($rules);
+        }),
+    (new Extend\Validator(PostValidator::class))
+        ->configure(function ($flarumValidator, $validator) {
+            $rules = $validator->getRules();
+
+            if (!array_key_exists('content', $rules)) {
+                return;
+            }
+
+            $rules['content'] = array_map(function(string $rule) {
+                if (Str::startsWith($rule, 'max:')) {
+                    return 'max:16777215';
+                }
+                
+                return $rule;
+            }, $rules['content']);
+
+            $validator->setRules($rules);
+        }),
 ];

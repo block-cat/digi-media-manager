@@ -6,8 +6,8 @@ digi-media-manager:
       title: 'Drag and drop here'
       subtitle: 'or upload using the right-corner button'
       transliterate_button: 'Transliterate'
-      add_to_composer_button: 'Continuă'
-      checkbox_text_original: 'Text original (chirilică)'
-      checkbox_text_transliterat: 'Text transliterat'
+      add_to_composer_button: 'Continue'
+      checkbox_text_original: 'Original text (cyrillic)'
+      checkbox_text_transliterat: 'Transliterated text'
       errors:
         file_not_found: 'Needed files not found! Please try again later!'
