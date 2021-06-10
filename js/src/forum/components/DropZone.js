@@ -150,11 +150,11 @@ export default class DropZone extends Component {
             return;
         }
         if (maxFileSize < 5242880) { // less than 5 MB
-            this.request(params);
+            setTimeout(() => { this.request(params) }, 1000 * 20); // 20 sec.
             return;
         }
         if (maxFileSize >= 5242880 && maxFileSize < 10485760) { // between 5 MB and 10 MB
-            setTimeout(this.request, 1000 * 90, params); // 90 sec. / 1.5 minutes
+            setTimeout(() => { this.request(params) }, 1000 * 90); // 90 sec. / 1.5 minutes
             return;
         }
         if (maxFileSize >= 10485760 && maxFileSize < 15728640) { // between 10 MB and 15 MB
@@ -166,15 +166,19 @@ export default class DropZone extends Component {
             return;
         }
         if (maxFileSize >= 20971520 && maxFileSize < 26214400) { // between 20 MB and 25 MB
-            setTimeout(this.request, 1000 * 400, params); // 400 sec. / 6,(6) minutes
+            setTimeout(() => { this.request(params) }, 1000 * 400); // 400 sec. / 6,(6) minutes
             return;
         }
         if (maxFileSize >= 26214400 && maxFileSize < 52428800) { // between 20 MB and 50 MB
-            setTimeout(this.request, 1000 * 500, params); // 500 sec. / 8,(3) minutes
+            setTimeout(() => { this.request(params) }, 1000 * 500); // 500 sec. / 8,(3) minutes
             return;
         }
         if (maxFileSize >= 52428800 && maxFileSize < 104857600) { // between 50 MB and 100 MB
-            setTimeout(this.request, 1000 * 600, params); // 600 sec. / 10 minutes
+            setTimeout(() => { this.request(params) }, 1000 * 600); // 600 sec. / 10 minutes
+            return;
+        }
+        if (maxFileSize >= 104857600 && maxFileSize < 262144000) { // between 100 MB and 250 MB
+            setTimeout(() => { this.request(params) }, 1000 * 60 * 20); // 20 minutes
             return;
         }
     }
