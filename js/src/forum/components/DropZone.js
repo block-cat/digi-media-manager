@@ -150,7 +150,7 @@ export default class DropZone extends Component {
             return;
         }
         if (maxFileSize < 5242880) { // less than 5 MB
-            setTimeout(() => { this.request(params) }, 1000 * 20); // 20 sec.
+            setTimeout(() => { this.request(params) }, 1000 * 55); // 20 sec. -> 55 sec. 16.06.2021
             return;
         }
         if (maxFileSize >= 5242880 && maxFileSize < 10485760) { // between 5 MB and 10 MB
