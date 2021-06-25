@@ -144,45 +144,49 @@ export default class DropZone extends Component {
         });
 
         if (maxFileSize === 0) {
-            alert('One or more files no corresponding with requirement!');
+            alert('Unul sau mai multe fișiere nu corespund cerințelor!');
             this.loading = false;
             m.redraw();
             return;
         }
-        if (maxFileSize < 5242880) { // less than 5 MB
-            setTimeout(() => { this.request(params) }, 1000 * 55); // 20 sec. -> 55 sec. 16.06.2021
-            return;
-        }
-        if (maxFileSize >= 5242880 && maxFileSize < 10485760) { // between 5 MB and 10 MB
-            setTimeout(() => { this.request(params) }, 1000 * 90); // 90 sec. / 1.5 minutes
-            return;
-        }
-        if (maxFileSize >= 10485760 && maxFileSize < 15728640) { // between 10 MB and 15 MB
-            setTimeout(() => { this.request(params) }, 1000 * 150); // 150 sec. / 2.5 minutes
-            return;
-        }
-        if (maxFileSize >= 15728640 && maxFileSize < 20971520) { // between 15 MB and 20 MB
-            setTimeout(() => { this.request(params) }, 1000 * 300); // 300 sec. / 5 minutes
-            return;
-        }
-        if (maxFileSize >= 20971520 && maxFileSize < 26214400) { // between 20 MB and 25 MB
-            setTimeout(() => { this.request(params) }, 1000 * 400); // 400 sec. / 6,(6) minutes
-            return;
-        }
-        if (maxFileSize >= 26214400 && maxFileSize < 52428800) { // between 20 MB and 50 MB
-            setTimeout(() => { this.request(params) }, 1000 * 500); // 500 sec. / 8,(3) minutes
-            return;
-        }
-        if (maxFileSize >= 52428800 && maxFileSize < 104857600) { // between 50 MB and 100 MB
-            setTimeout(() => { this.request(params) }, 1000 * 600); // 600 sec. / 10 minutes
-            return;
-        }
-        if (maxFileSize >= 104857600 && maxFileSize < 262144000) { // between 100 MB and 250 MB
-            setTimeout(() => { this.request(params) }, 1000 * 60 * 20); // 20 minutes
-            return;
-        }
-    }
 
+        this.request(params);
+
+        // Modified 25.06.2021 timpul de asteptare eliminat
+        // if (maxFileSize < 5242880) { // less than 5 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 55); // 20 sec. -> 55 sec. 16.06.2021
+        //     return;
+        // }
+        // if (maxFileSize >= 5242880 && maxFileSize < 10485760) { // between 5 MB and 10 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 90); // 90 sec. / 1.5 minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 10485760 && maxFileSize < 15728640) { // between 10 MB and 15 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 150); // 150 sec. / 2.5 minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 15728640 && maxFileSize < 20971520) { // between 15 MB and 20 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 300); // 300 sec. / 5 minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 20971520 && maxFileSize < 26214400) { // between 20 MB and 25 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 400); // 400 sec. / 6,(6) minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 26214400 && maxFileSize < 52428800) { // between 20 MB and 50 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 500); // 500 sec. / 8,(3) minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 52428800 && maxFileSize < 104857600) { // between 50 MB and 100 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 600); // 600 sec. / 10 minutes
+        //     return;
+        // }
+        // if (maxFileSize >= 104857600 && maxFileSize < 262144000) { // between 100 MB and 250 MB
+        //     setTimeout(() => { this.request(params) }, 1000 * 60 * 20); // 20 minutes
+        //     return;
+        // }
+    }
+    
     request(params) {
         return app
             .request({
