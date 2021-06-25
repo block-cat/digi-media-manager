@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  * This file is part of block-cat/digi-media-manager.
  *
@@ -14,7 +15,7 @@ namespace BlockCat\DigiMediaManager\Listeners;
 use FoF\Upload\Events\File\WasSaved;
 use Flarum\Foundation\Paths;
 
-class CopyUploadedFile {
+class CopyUploadedFile { 
 
     // /public Flarum folder
     protected $path;
@@ -30,6 +31,9 @@ class CopyUploadedFile {
     }
 
     public function handle(WasSaved $event) {
+
+        var_dump("Hello!!!");
+
         // get currently created file
         $uploadedFile = $event->file;
         
