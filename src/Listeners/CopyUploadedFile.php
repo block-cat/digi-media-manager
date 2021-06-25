@@ -36,33 +36,33 @@ class CopyUploadedFile {
         // get currently created file path
         $uploadedFilePath = $uploadedFile->path;
         // get currently created file name
-        $uploadedFileName = explode(DIRECTORY_SEPARATOR, $uploadedFilePath,2)[1];
+        $uploadedFileName = explode("/", $uploadedFilePath,2)[1];
 
         // create absolute path to created file
         // .../flarum/public\assets\files\DATE\FILENAME
         $sourceFile = $this->path .
-            DIRECTORY_SEPARATOR . "assets" .
-            DIRECTORY_SEPARATOR . "files" .
-            DIRECTORY_SEPARATOR . $uploadedFilePath;
+            "/" . "assets" .
+            "/" . "files" .
+            "/" . $uploadedFilePath;
 
         // verify every folder from /OCR folder
         // .../flarum/public\assets\files\OCR\(0-9)
         for($i=0; $i<10; $i++) {
             // create absolute path for copy destination depends on $i
             $destination = $this->path .
-                DIRECTORY_SEPARATOR . "assets" .
-                DIRECTORY_SEPARATOR . "files" .
-                DIRECTORY_SEPARATOR . "OCR" .
-                DIRECTORY_SEPARATOR . $i .
-                DIRECTORY_SEPARATOR . $uploadedFileName;
+                "/" . "assets" .
+                "/" . "files" .
+                "/" . "OCR" .
+                "/" . $i .
+                "/" . $uploadedFileName;
             // create absolute path for folders from /OCR
             // .../flarum/public\assets\files\OCR\(0-9)\
             $ocr = $this->path .
-                DIRECTORY_SEPARATOR . "assets" .
-                DIRECTORY_SEPARATOR . "files" .
-                DIRECTORY_SEPARATOR . "OCR" .
-                DIRECTORY_SEPARATOR . $i .
-                DIRECTORY_SEPARATOR;
+                "/" . "assets" .
+                "/" . "files" .
+                "/" . "OCR" .
+                "/" . $i .
+                "/";
             // get content from folders from /OCR
             $files = glob($ocr . "*");
 
@@ -92,11 +92,11 @@ class CopyUploadedFile {
         }
         // create new destination depends on $minFileCountIndex
         $destination = $this->path .
-            DIRECTORY_SEPARATOR . "assets" .
-            DIRECTORY_SEPARATOR . "files" .
-            DIRECTORY_SEPARATOR . "OCR" .
-            DIRECTORY_SEPARATOR . $minFileCountIndex .
-            DIRECTORY_SEPARATOR . $uploadedFileName;
+            "/" . "assets" .
+            "/" . "files" .
+            "/" . "OCR" .
+            "/" . $minFileCountIndex .
+            "/" . $uploadedFileName;
 
         // copy file
         copy($sourceFile, $destination);
