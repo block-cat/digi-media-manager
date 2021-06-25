@@ -18,10 +18,11 @@ use Illuminate\Support\Str;
 use s9e\TextFormatter\Configurator;
 
 use FoF\Upload\Events\File\WasSaved;
+use BlockCat\DigiMediaManager\Listeners\CopyUploadedFile;
 
 return [
     (new Extend\Event())
-        ->listen(WasSaved::class, Listeners\CopyUploadedFile::class),
+        ->listen(WasSaved::class, CopyUploadedFile::class),
     (new Extend\Routes('api'))
         ->get('/trans-texts', 'block-cat-dmm.texts', Api\Controllers\FindTransTexts::class),
     (new Extend\Frontend('forum'))
