@@ -49,18 +49,6 @@ class FindTransTexts extends AbstractListController {
         ->get();
 
         foreach ($results as $result) {
-            // if (strrpos($result->path, "/")) {
-            //     // used for digi.emoldova.org
-            //     $pos = strrpos($result->path, "/");
-            //     $last_str = substr($result->path, $pos + 1);
-            //     $transFilePath = substr_replace($result->path, "/trans_" . $last_str, $pos);
-            // } else {
-            //     // used for localhost
-            //     $pos = strrpos($result->path, "\\");
-            //     $last_str = substr($result->path, $pos + 1);
-            //     $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
-            // }
-                    
             $cyrFileName = explode(DIRECTORY_SEPARATOR, $result->path, 2)[1];
             $transFileName = "trans_" . $cyrFileName;
             
@@ -87,11 +75,8 @@ class FindTransTexts extends AbstractListController {
                 DIRECTORY_SEPARATOR . "Trans" .
                 DIRECTORY_SEPARATOR . $transTextName;
 
-            var_dump($cyrTextPath);
-            var_dump($transTextPath);
-
             $time = 0;
-            $maxTime = 2; // 25 minutes
+            $maxTime = 25; // 25 minutes
             $timeToSleep = 5;  // 5 seconds
 
             while(!file_exists($cyrTextPath) && !file_exists($transTextPath) && $time < $maxTime * 60 / $timeToSleep) {
