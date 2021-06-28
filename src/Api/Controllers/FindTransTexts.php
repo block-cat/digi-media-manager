@@ -73,9 +73,6 @@ class FindTransTexts extends AbstractListController {
                 DIRECTORY_SEPARATOR . "Trans" .
                 DIRECTORY_SEPARATOR . $transTextName;
 
-            var_dump($cyrTextPath);
-            var_dump($transTextPath);
-
             $time = 0;
             $maxTime = 25; // 25 minutes
             $timeToSleep = 5;  // 5 seconds
