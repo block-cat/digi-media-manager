@@ -36,7 +36,7 @@ class CopyUploadedFile {
         // get currently created file path
         $uploadedFilePath = $uploadedFile->path;
         // get currently created file name
-        $uploadedFileName = explode(DIRECTORY_SEPARATOR, $uploadedFilePath,2)[1];
+        $uploadedFileName = explode(DIRECTORY_SEPARATOR, $uploadedFilePath, 2)[1];
 
         // create absolute path to created file
         // .../flarum/public\assets\files\DATE\FILENAME

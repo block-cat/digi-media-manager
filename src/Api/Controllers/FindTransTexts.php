@@ -49,46 +49,62 @@ class FindTransTexts extends AbstractListController {
         ->get();
 
         foreach ($results as $result) {
-            if (strrpos($result->path, "/")) {
-                // used for digi.emoldova.org
-                $pos = strrpos($result->path, "/");
-                $last_str = substr($result->path, $pos + 1);
-                $transFilePath = substr_replace($result->path, "/trans_" . $last_str, $pos);
-            } else {
-                // used for localhost
-                $pos = strrpos($result->path, "\\");
-                $last_str = substr($result->path, $pos + 1);
-                $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
-            }
+            // if (strrpos($result->path, "/")) {
+            //     // used for digi.emoldova.org
+            //     $pos = strrpos($result->path, "/");
+            //     $last_str = substr($result->path, $pos + 1);
+            //     $transFilePath = substr_replace($result->path, "/trans_" . $last_str, $pos);
+            // } else {
+            //     // used for localhost
+            //     $pos = strrpos($result->path, "\\");
+            //     $last_str = substr($result->path, $pos + 1);
+            //     $transFilePath = substr_replace($result->path, "\\trans_" . $last_str, $pos);
+            // }
+                    
+            $cyrFileName = explode(DIRECTORY_SEPARATOR, $result->path, 2)[1];
+            $transFileName = "trans_" . $cyrFileName;
             
-            $cyrFilePath = $result->path;
-
-            if (str_ends_with($transFilePath, '.jpg') || str_ends_with($transFilePath, '.png')
-                || str_ends_with($transFilePath, '.pdf')) {
+            if (str_ends_with($transFileName, '.jpg') || str_ends_with($transFileName, '.png')
+                || str_ends_with($transFileName, '.pdf')) {
                     $pos = -4;
                 };
-            if (str_ends_with($transFilePath, '.jpeg') || str_ends_with($transFilePath, '.tiff')) {
-                    $pos = -5;
-                };
+            if (str_ends_with($transFileName, '.jpeg') || str_ends_with($transFileName, '.tiff')) {
+                $pos = -5;
+            };
+            
+            $cyrTextName = substr_replace($cyrFileName, ".txt", $pos);
+            $transTextName = substr_replace($transFileName, ".txt", $pos);
+            
+            $cyrTextPath = $this->path .
+                DIRECTORY_SEPARATOR . "assets" .
+                DIRECTORY_SEPARATOR . "files" .
+                DIRECTORY_SEPARATOR . "Trans" .
+                DIRECTORY_SEPARATOR . $cyrTextName;
+            
+            $transTextPath = $this->path .
+                DIRECTORY_SEPARATOR . "assets" .
+                DIRECTORY_SEPARATOR . "files" .
+                DIRECTORY_SEPARATOR . "Trans" .
+                DIRECTORY_SEPARATOR . $transTextName;
 
-            $cyrTextPath = substr_replace($cyrFilePath, ".txt", $pos);
-            $transTextPath = substr_replace($transFilePath, ".txt", $pos);
+            var_dump($cyrTextPath);
+            var_dump($transTextPath);
 
             $time = 0;
-            $maxTime = 0.9; // 0.9 minutes
+            $maxTime = 2; // 25 minutes
             $timeToSleep = 5;  // 5 seconds
 
-            while(!file_exists($this->path . "/assets/files/" . $transTextPath) && $time < $maxTime * 60 / 5) {
+            while(!file_exists($cyrTextPath) && !file_exists($transTextPath) && $time < $maxTime * 60 / $timeToSleep) {
                 sleep($timeToSleep);
                 $time++;
             }
 
-            if ($time >= $maxTime * 60 / 5) {
+            if ($time >= $maxTime * 60 / $timeToSleep) {
                 throw new ValidationException(['file' => $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
             }
             
-            $result->path = file_get_contents($this->path . "/assets/files/" . $cyrTextPath);
-            $result->url = file_get_contents($this->path . "/assets/files/" . $transTextPath);
+            $result->path = file_get_contents($cyrTextPath);
+            $result->url = file_get_contents($transTextPath);
         }
 
         return $results;
