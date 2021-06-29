@@ -5,7 +5,9 @@ digi-media-manager:
     dropzone:
       title: 'Trage fișiere aici'
       subtitle: 'sau folosește butonul „Încarcă”'
+      loading_text: ''
       transliterate_button: 'Transliterare'
+      after_transliteration: 'Textul din imagine a fost recunoscut și transliterat. Selectează textul/textele pentru a continua.'
       add_to_composer_button: 'Continuă'
       checkbox_text_original: 'Text original (chirilică)'
       checkbox_text_transliterat: 'Text transliterat'

@@ -3,6 +3,7 @@ import Component from 'flarum/common/Component';
 import UserFileList from './UserFileList';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
+import UploadButton from './UploadButton';
 
 export default class DropZone extends Component {
     oninit(vnode) {
@@ -47,6 +48,7 @@ export default class DropZone extends Component {
                     this.loading &&
                     (
                         <div className="div_loading">
+                            <h3 className="loading_text">{app.translator.trans('digi-media-manager.forum.dropzone.loading_text')}</h3>
                             <img src="https://digi.emoldova.org/assets/files/2021-04-29/1619697698-204093-cyr-ocr-animation.gif" />
                         </div>
                     )
@@ -79,7 +81,7 @@ export default class DropZone extends Component {
 
                                 {this.files && (
                                     <div className='UserFileList-text'>
-                                        <h3 class>Textul din imagine a fost recunoscut si transliterat. Selecteaza textul/textele pentru a continua.</h3>
+                                        <h3 class>{app.translator.trans('digi-media-manager.forum.dropzone.after_transliteration')}</h3>
                                         <div className="Form-group">
                                             <div>
                                                 <label className="checkbox">
@@ -119,6 +121,9 @@ export default class DropZone extends Component {
                         </div>
                         <h1>{app.translator.trans('digi-media-manager.forum.dropzone.title')}</h1>
                         <p>{app.translator.trans('digi-media-manager.forum.dropzone.subtitle')}</p>
+                        <div className="fof-modal-buttons App-backControl">
+                  <UploadButton uploader={this.uploader} disabled={app.fileListState.isLoading()} isMediaUploadButton />
+                        </div>
                     </div>)}
             </div>
         );

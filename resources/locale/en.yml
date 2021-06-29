@@ -5,8 +5,10 @@ digi-media-manager:
     dropzone:
       title: 'Drag and drop here'
       subtitle: 'or upload using the right-corner button'
+      loading_text: ''
       transliterate_button: 'Transliterate'
-      add_to_composer_button: 'Continuă'
+      after_transliteration: ''
+      add_to_composer_button: 'Continue'
       checkbox_text_original: 'Text original (chirilică)'
       checkbox_text_transliterat: 'Text transliterat'
       errors:
