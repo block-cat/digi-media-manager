@@ -3,7 +3,6 @@ import Component from 'flarum/common/Component';
 import UserFileList from './UserFileList';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
-import UploadButton from './UploadButton';
 
 export default class DropZone extends Component {
     oninit(vnode) {
@@ -121,9 +120,6 @@ export default class DropZone extends Component {
                         </div>
                         <h1>{app.translator.trans('digi-media-manager.forum.dropzone.title')}</h1>
                         <p>{app.translator.trans('digi-media-manager.forum.dropzone.subtitle')}</p>
-                        <div className="fof-modal-buttons App-backControl">
-                  <UploadButton uploader={this.uploader} disabled={app.fileListState.isLoading()} isMediaUploadButton />
-                        </div>
                     </div>)}
             </div>
         );
