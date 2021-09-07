@@ -88,6 +88,10 @@ class FindTransTexts extends AbstractListController {
                 throw new ValidationException(['file' => $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
             }
             
+            while(file_get_contents($cyrTextPath) === false || file_get_contents($transTextPath) === false) {
+                sleep($timeToSleep);
+            }
+
             $result->path = file_get_contents($cyrTextPath);
             $result->url = file_get_contents($transTextPath);
         }

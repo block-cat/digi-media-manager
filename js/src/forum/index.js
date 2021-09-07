@@ -6,11 +6,15 @@ import app from 'flarum/app';
 
 app.initializers.add('block-cat/digi-media-manager', () => {
   extend(require('@fof-upload').components.FileManagerModal.prototype, 'oninit', function() {
+    if (!app.session.user) return;
+
     app.forum.data.attributes.userFileListVisibility = false;
   });
 
 
   override(require('@fof-upload').components.FileManagerModal.prototype, 'view', function(original) {
+    if (!app.session.user) return original();
+
     return (
       <div className={`Modal modal-dialog ${this.className()}`}>
           <div className="Modal-content">
@@ -92,6 +96,8 @@ app.initializers.add('block-cat/digi-media-manager', () => {
   });
 
   require('@fof-upload').components.FileManagerModal.prototype.showAllFiles =  () => {
+    if (!app.session.user) return;
+
     app.forum.data.attributes.userFileListVisibility ^= true;
   }
 });
