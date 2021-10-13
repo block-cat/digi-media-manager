@@ -75,17 +75,31 @@ class FindTransTexts extends AbstractListController {
                 DIRECTORY_SEPARATOR . "Trans" .
                 DIRECTORY_SEPARATOR . $transTextName;
 
+            // path to python script for transliteration by Tudor on 13 october 2021
+            $transScriptPath = $this->path .
+                DIRECTORY_SEPARATOR . "assets" .
+                DIRECTORY_SEPARATOR . "files" . 
+                DIRECTORY_SEPARATOR . "trans_v35.py";
+
             $time = 0;
             $maxTime = 25; // 25 minutes
             $timeToSleep = 5;  // 5 seconds
 
-            while(!file_exists($cyrTextPath) && !file_exists($transTextPath) && $time < $maxTime * 60 / $timeToSleep) {
+            // delete && !file_exists($transTextPath) check by Tudor on 13 october 2021
+            while(!file_exists($cyrTextPath) && $time < $maxTime * 60 / $timeToSleep) {
                 sleep($timeToSleep);
                 $time++;
             }
 
             if ($time >= $maxTime * 60 / $timeToSleep) {
                 throw new ValidationException(['file' => $this->translator->trans('digi-media-manager.forum.dropzone.errors.file_not_found')]);
+            }
+
+            // odata fisierul OCR gasit pornim procesul de transliterare
+            if (file_exists($cyrTextPath)) {
+                $command = escapeshellcmd($transScriptPath);
+                $output = shell_exec($command);
+                echo $output;
             }
             
             while(file_get_contents($cyrTextPath) === false || file_get_contents($transTextPath) === false) {
