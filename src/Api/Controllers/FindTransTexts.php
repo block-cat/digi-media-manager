@@ -97,8 +97,8 @@ class FindTransTexts extends AbstractListController {
 
             // odata fisierul OCR gasit pornim procesul de transliterare
             if (file_exists($cyrTextPath)) {
-                $command = escapeshellcmd($transScriptPath);
-                // $output = shell_exec($command);
+                $command = escapeshellcmd('python3 ' . $transScriptPath . ' ' . $cyrTextPath);
+                $output = shell_exec($command);
                 var_dump($command);
                 die();
                 // echo $output;
