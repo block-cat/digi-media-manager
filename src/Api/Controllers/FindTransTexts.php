@@ -99,9 +99,7 @@ class FindTransTexts extends AbstractListController {
             if (file_exists($cyrTextPath)) {
                 $command = escapeshellcmd('python3 ' . $transScriptPath . ' ' . $cyrTextPath);
                 $output = shell_exec($command);
-                var_dump($command);
-                die();
-                // echo $output;
+                sleep(2);
             }
             
             while(file_get_contents($cyrTextPath) === false || file_get_contents($transTextPath) === false) {
