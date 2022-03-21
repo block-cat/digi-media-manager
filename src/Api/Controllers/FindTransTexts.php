@@ -76,7 +76,7 @@ class FindTransTexts extends AbstractListController {
                 DIRECTORY_SEPARATOR . $transTextName;
 
             // path to python script for transliteration by Tudor on 13 october 2021
-            $transScriptPath = $this->path .
+            $transPythonScriptPath = $this->path .
                 DIRECTORY_SEPARATOR . "assets" .
                 DIRECTORY_SEPARATOR . "files" . 
                 DIRECTORY_SEPARATOR . "trans_v35.py";
@@ -97,7 +97,7 @@ class FindTransTexts extends AbstractListController {
 
             // odata fisierul OCR gasit pornim procesul de transliterare
             if (file_exists($cyrTextPath)) {
-                $command = escapeshellcmd('python3 ' . $transScriptPath . ' ' . $cyrTextPath);
+                $command = escapeshellcmd('python3 ' . $transPythonScriptPath . ' ' . $cyrTextPath);
                 $output = shell_exec($command);
                 sleep(2);
             }
